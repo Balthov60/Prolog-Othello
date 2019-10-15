@@ -2,7 +2,7 @@ initialize(Game, Position, Player).
 
 play(Game) :- 
 	initialize(Game, Position, Player),
-	display(Position, Player),
+	display(),
 	play(Position, Player, Result).
 	
 play(Position, Player, Result) :- 
