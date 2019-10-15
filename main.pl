@@ -5,11 +5,11 @@ case(X, Y, LIST, RESULT) :-
     Z is X * 8 + Y,
     nth0(Z, LIST, RESULT).
 
-% Remplace ma valeur LIST[X][Y] par NEW et renvoi RESULT_LIST la nouvelle LIST
-replace(X, Y, NEW, LIST, RESULT_LIST) :-
+% Remplace ma valeur MAT[X][Y] par NEW et renvoi RESULT_MAT la nouvelle MAT
+remplace(X, Y, NEW, MAT, RESULT_MAT) :-
     Z is X * 8 + Y,
-    nth0(Z, LIST, _, TEMP),
-    nth0(Z, RESULT_LIST, NEW, TEMP).
+    nth0(Z, MAT, _, TEMP),
+    nth0(Z, RESULT_MAT, NEW, TEMP).
 
 % Print board
 print_matrice([]).
@@ -24,5 +24,5 @@ init_board(MAT) :-
 main :-
     init_board(MAT),
     print_matrice(MAT),
-    replace(0, 0, b, MAT, RESULT_MAT),
+    remplace(0, 0, b, MAT, RESULT_MAT),
     print_matrice(RESULT_MAT).
