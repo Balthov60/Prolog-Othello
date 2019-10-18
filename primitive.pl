@@ -17,12 +17,5 @@ print_matrice([H1,H2,H3,H4,H5,H6,H7,H8|Matrice]) :-
     format('~w ~w ~w ~w ~w ~w ~w ~w~n', [H1,H2,H3,H4,H5,H6,H7,H8]),
     print_matrice(Matrice).
 
-% Init board
-init_board(MAT) :-
-    MAT = [v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, b, n, v, v, v, v, v, v, n, b, v, v, v, v, v, v, v, v, v, v, v,v, v, v, v, v, v, v, v,v, v, v, v, v, v, v, v].
-
-main :-
-    init_board(MAT),
-    print_matrice(MAT),
-    remplace(0, 0, b, MAT, RESULT_MAT),
-    print_matrice(RESULT_MAT).
+% Renvoi true si liste non vide
+listeNonVide([_|_]).
