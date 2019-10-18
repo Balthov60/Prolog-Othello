@@ -7,13 +7,13 @@ initPlateau(Plateau) :-
 % Liste les coups possible pour couleur dans coupsPossibles
 listeCoupsPossible(Plateau, Couleur, CoupsPossible) :-
 	% TODO
-    CoupsPossible is [[1, 2], [2,3]].
+    CoupsPossible = [[1,2],[2,3]].
 
 % Logique centrale : choisis un coup X,Y parmus coupsPossible
 choixCoupPossible(Plateau, Couleur, CoupsPossible, X, Y) :-
     % TODO
-    X is 0,
-    Y is 0.
+    X = 0,
+    Y = 0.
  
 % Demande à l’utilisateur de choisir un x y parmis les coupsPossible
 entrerCoup(CoupsPossible, X, Y) :-
@@ -23,9 +23,10 @@ entrerCoup(CoupsPossible, X, Y) :-
 
 % placer un pion. Return false si autre statut que vide 
 % X,Y => Coordonnée, LIST => plateau, COULEUR => n(noir) ou b(blanc) en fonction du joueur
-placerPion(X, Y, LIST, COULEUR, RESULT):-
-    ( case(X,Y, LIST, v)->
-            replace(X, Y, COULEUR, LIST, RESULT)
+placerPion(Plateaun, Couleur, X, Y) :-
+    ( case(X, Y, Plateau, V) ->
+            remplace(X, Y, Couleur, Plateau, RESULT);
+            Plateau is RESULT
     ; fail).
 
 %%%%%%%%%%%%%%%%
@@ -88,8 +89,8 @@ flipPion(Plateau, X, Y) :-
 testFinPartie(Plateau) :-
     listeCoupsPossible(Plateau, b, CoupsBlancs),
     listeCoupsPossible(Plateau, n, CoupsNoirs),
-    \listeNonVide(CoupsBlancs),
-    \listeNonVide(CoupsNoirs).
+    not(listeNonVide(CoupsBlancs)),
+    not(listeNonVide(CoupsNoirs)).
 
 % Affiche les résultat sur la partie
 afficherResultat(Plateau) :-
