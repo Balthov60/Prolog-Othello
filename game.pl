@@ -2,7 +2,7 @@ case(X, Y, LIST, RESULT) :-
     Z is X * 8 + Y,
     nth0(Z , LIST, RESULT).
  
- replace(X, Y, N, L, R) :-
+replace(X, Y, N, L, R) :-
     Z is X * 8 + Y,
     nth0(Z, L, _, RR),
     nth0(Z, R, N, RR).
@@ -21,3 +21,15 @@ flipPion(Plateau, X, Y, R):-
    (Z = 'n' -> replace(X, Y, 'b', Plateau, R);
    Z = 'b' -> replace(X, Y, 'n', Plateau, R);
    fail).
+
+% lit les coordonnées du coup du joueur
+lire_coord_joueur(X, Y):-
+	writeln('Entrer coord X puis Y (0 <= X,Y <= 7,) :'),
+	read(X),
+	read(Y),
+	(X > 7 -> lire_coord_joueur(X,Y);
+	 X < 0 -> lire_coord_joueur(X,Y);
+	 Y > 7 -> lire_coord_joueur(X,Y);
+	 Y < 0 -> lire_coord_joueur(X,Y);
+	 !
+ 	 ).
