@@ -1,33 +1,3 @@
-:- consult(primitive).
-
-% Initialise le plateau dans plateau
-initPlateau(Plateau) :-
-    Plateau = [v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, b, n, v, v, v, v, v, v, n, b, v, v, v, v, v, v, v, v, v, v, v,v, v, v, v, v, v, v, v,v, v, v, v, v, v, v, v].
-
-% Liste les coups possible pour couleur dans coupsPossibles
-listeCoupsPossible(Plateau, Couleur, CoupsPossible) :-
-	% TODO
-    CoupsPossible is [[1, 2], [2,3]].
-
-% Logique centrale : choisis un coup X,Y parmus coupsPossible
-choixCoupPossible(Plateau, Couleur, CoupsPossible, X, Y) :-
-    % TODO
-    X is 0,
-    Y is 0.
- 
-% Demande à l’utilisateur de choisir un x y parmis les coupsPossible
-entrerCoup(CoupsPossible, X, Y) :-
-    % TODO
-    X is 0,
-    Y is 0.
-
-% placer un pion. Return false si autre statut que vide 
-% X,Y => Coordonnée, LIST => plateau, COULEUR => n(noir) ou b(blanc) en fonction du joueur
-placerPion(X, Y, LIST, COULEUR, RESULT):-
-    ( case(X,Y, LIST, v)->
-            replace(X, Y, COULEUR, LIST, RESULT)
-    ; fail).
-
 %%%%%%%%%%%%%%%%
 %% FLIP CASES %%
 %%%%%%%%%%%%%%%%
@@ -79,24 +49,3 @@ flipPion(Plateau, X, Y) :-
    Z = 'b' -> replace(X, Y, 'n', Plateau, r);
    fail),
    Plateau is r.
-      
-%%%%%%%%%%%%%%
-%% END GAME %%
-%%%%%%%%%%%%%%
-
-% Vérifie si le jeu est terminé
-testFinPartie(Plateau) :-
-    listeCoupsPossible(Plateau, b, CoupsBlancs),
-    listeCoupsPossible(Plateau, n, CoupsNoirs),
-    \listeNonVide(CoupsBlancs),
-    \listeNonVide(CoupsNoirs).
-
-% Affiche les résultat sur la partie
-afficherResultat(Plateau) :-
-    print_matrice(Plateau),
-   	count(Plateau, b, B),
-	count(Plateau, n, N),
-    (N > B -> write('Les noirs ont gagné! '),write(N),write(' à '),write(B);
-   	B > N -> write('Les blancs ont gagné! '),write(B),write(' à '),write(N);
-   	B = N ->  write('Match nul! '),write(N),write(' partout.');
-   	fail).

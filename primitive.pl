@@ -19,3 +19,9 @@ print_matrice([H1,H2,H3,H4,H5,H6,H7,H8|Matrice]) :-
 
 % Renvoi true si liste non vide
 listeNonVide([_|_]).
+
+% Primitive Afficher resultat
+
+count([],_,0).
+count([C|R],C,X) :- count(R,C,Y), X is 1+Y.
+count([_|R],C,X) :- count(R,C,X).
