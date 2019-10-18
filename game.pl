@@ -24,18 +24,30 @@ flipPion(Plateau, X, Y, R):-
 
 listeNonVide([_|_]).
 
+/*
 % lit les coordonnées du coup du joueur
 % TO DO : verif la possibilité du coup
-lire_coord_joueur(X, Y):-
-	writeln('Entrer coord X puis Y (0 <= X,Y <= 7,) :'),
+lire_coord_joueur(LISTE_COUP_POSSIBLE, X, Y):-
+	writeln('Entrer coord X puis Y (0 <= X Y <= 7,) :'),
 	read(X),
 	read(Y),
-	(X > 7 -> lire_coord_joueur(X,Y);
-	 X < 0 -> lire_coord_joueur(X,Y);
-	 Y > 7 -> lire_coord_joueur(X,Y);
-	 Y < 0 -> lire_coord_joueur(X,Y);
+	writeln(X),
+	writeln(Y),
+	(X > 7 -> lire_coord_joueur(LISTE_COUP_POSSIBLE,_,_);
+	 X < 0 -> lire_coord_joueur(LISTE_COUP_POSSIBLE,_,_);
+	 Y > 7 -> lire_coord_joueur(LISTE_COUP_POSSIBLE,_,_);
+	 Y < 0 -> lire_coord_joueur(LISTE_COUP_POSSIBLE,_,_);
+	 not(member([X,Y], LISTE_COUP_POSSIBLE)) ->  writeln('Ce coup n\'est pas permis !'),
+ 						lire_coord_joueur(LISTE_COUP_POSSIBLE, _, _);
 	 !
  	 ).
+
+*/
+
+lire_coord_joueur(X, Y):-
+	writeln('Entrer coord X puis Y (0 <= X Y <= 7,) :'),
+	read(X),
+	read(Y).
 
 % calcule les coordonnees X2 et Y2
 % permet d avancer dans une direction
