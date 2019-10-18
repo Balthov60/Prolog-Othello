@@ -21,3 +21,5 @@ flipPion(Plateau, X, Y, R):-
    (Z = 'n' -> replace(X, Y, 'b', Plateau, R);
    Z = 'b' -> replace(X, Y, 'n', Plateau, R);
    fail).
+
+listeNonVide([_|_]).
