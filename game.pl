@@ -25,6 +25,7 @@ flipPion(Plateau, X, Y, R):-
 listeNonVide([_|_]).
 
 % lit les coordonnées du coup du joueur
+% TO DO : verif la possibilité du coup
 lire_coord_joueur(X, Y):-
 	writeln('Entrer coord X puis Y (0 <= X,Y <= 7,) :'),
 	read(X),
