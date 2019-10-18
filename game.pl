@@ -22,6 +22,8 @@ flipPion(Plateau, X, Y, R):-
    Z = 'b' -> replace(X, Y, 'n', Plateau, R);
    fail).
 
+listeNonVide([_|_]).
+
 % lit les coordonnées du coup du joueur
 lire_coord_joueur(X, Y):-
 	writeln('Entrer coord X puis Y (0 <= X,Y <= 7,) :'),
