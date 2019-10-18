@@ -36,3 +36,14 @@ lire_coord_joueur(X, Y):-
 	 Y < 0 -> lire_coord_joueur(X,Y);
 	 !
  	 ).
+
+% calcule les coordonnees X2 et Y2
+% permet d avancer dans une direction
+coordEnHaut(X,Y,X2,Y2):- X2 is X-1, Y2 is Y.
+coordEnHautDroite(X,Y,X2,Y2):- X2 is X-1, Y2 is Y+1.
+coordDroite(X,Y,X2,Y2):- X2 is X, Y2 is Y+1.
+coordEnBasDroite(X,Y,X2,Y2):- X2 is X+1, Y2 is Y+1.
+coordEnBas(X,Y,X2,Y2):- X2 is X+1, Y2 is Y.
+coordEnBasGauche(X,Y,X2,Y2):- X2 is X+1, Y2 is Y-1.
+coordGauche(X,Y,X2,Y2):- X2 is X, Y2 is Y-1.
+coordEnHautGauche(X,Y,X2,Y2):- X2 is X-1, Y2 is Y-1.
