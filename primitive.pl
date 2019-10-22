@@ -4,7 +4,7 @@
 case(X, Y, LIST, RESULT) :-
     Z is X * 8 + Y,
     nth0(Z, LIST, RESULT).
-
+    
 % Remplace ma valeur MAT[X][Y] par NEW et renvoi RESULT_MAT la nouvelle MAT
 remplace(X, Y, NEW, MAT, RESULT_MAT) :-
     Z is X * 8 + Y,
@@ -25,3 +25,8 @@ listeNonVide([_|_]).
 count([],_,0).
 count([C|R],C,X) :- count(R,C,Y), X is 1+Y.
 count([_|R],C,X) :- count(R,C,X).
+
+recuperer_X(LIST, X) :-
+    [X|_]. 
+recuperer_Y(LIST, Y) :-
+    [_|Y]. 

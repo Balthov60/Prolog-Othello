@@ -1,12 +1,9 @@
+:- consult(primitive).
 
 coupPossible(Plateau,X,Y,Couleur):- 
 	estVide(Plateau,X,Y), 
 	aVoisinCouleurOpposee(Plateau,X,Y,Couleur).
 %	encadreCouleurOpposee(Plateau,X,Y,Couleur,X2,Y2).
-
-case(X, Y, LIST, RESULT) :-
-    Z is X * 8 + Y,
-    nth0(Z, LIST, RESULT).
 
 % est vrai si la case est vide
 estVide(Plateau,X,Y):- case(X,Y,Plateau,v).
