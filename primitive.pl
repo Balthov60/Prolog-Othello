@@ -32,3 +32,17 @@ recuperer_X(LIST, X) :-
     [X|_]. 
 recuperer_Y(LIST, Y) :-
     [_|Y]. 
+
+estEgal(A,B):-
+    A=B.
+
+estPleine(A) :-
+    A\=v.
+
+estVide(A) :-
+    A=v.
+
+reverseCouleur(A, B) :-
+    (A = b -> B = n;
+        A = n -> B = b;
+    false).
