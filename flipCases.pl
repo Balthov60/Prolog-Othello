@@ -97,8 +97,8 @@ croix(Plateau, X, Y, Couleur, [X1, Y1]) :-
     (verticale(Plateau, X, Y, Couleur, XTrouve), X1 is XTrouve, Y1 is Y);
     (diagonale(Plateau, X, Y, Couleur, XTrouve, YTrouve), X1 is XTrouve, Y1 is YTrouve).
 
-findCoupPossible(Plateau, X, Y, Couleur, Liste) :-
-    bagof(Coords, croix(Plateau,X,Y,Couleur, Coords),Liste).
+%tryFlipCases(Plateau, X, Y, Couleur, Liste) :-
+%    bagof(Coords, croix(Plateau,X,Y,Couleur, Coords),Liste).
 
 %[b, v, v, v, v, b, b, v, v, n, v, b, v, n, v, v, v, v, n, n, n, n, v, v, v, b, n, b, n, b, v, v, v, v, n, n, n, n, n, b, v, b, v, b, v, n, v, v, v, v, v, v, v, v, b, v, v, v, v, b, v, v, v, v]
 /*  
