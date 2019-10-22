@@ -26,7 +26,8 @@ count([],_,0).
 count([C|R],C,X) :- count(R,C,Y), X is 1+Y.
 count([_|R],C,X) :- count(R,C,X).
 
-recuperer_X(LIST, X) :-
-    [X|_]. 
-recuperer_Y(LIST, Y) :-
-    [_|Y]. 
+recupererX([X|_], X).
+recupererY([_|A], Y) :-
+    unlist(A, Y).
+
+unlist([A], A).

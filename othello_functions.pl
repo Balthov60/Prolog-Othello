@@ -5,18 +5,19 @@
 initPlateau(Plateau) :-
     Plateau = [v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, b, n, v, v, v, v, v, v, n, b, v, v, v, v, v, v, v, v, v, v, v,v, v, v, v, v, v, v, v,v, v, v, v, v, v, v, v].
 
-% Liste les coups possible pour couleur dans coupsPossibles
-listeCoupsPossible(Plateau, Couleur, CoupsPossible) :-
-	% TODO
-    CoupsPossible = [[2,4],[2,5]].
-
 % Logique centrale : choisis un coup X,Y parmus coupsPossible
 choixCoupPossible(Plateau, Couleur, CoupsPossible, X, Y) :-
     % DOING
     Alpha = 1,
-    evaluer_et_choisir(Plateau, CoupsPossible, Couleur, 3, Alpha, 2, Coup, CoupResultant),
-    recupererX(CoupsPossible, X),
-    recupererY(CoupsPossible, Y).
+    write("temp Solution !\n"),
+    recupererX(CoupsPossible, CoupResultant),
+    recupererX(CoupResultant, X),
+    recupererY(CoupResultant, Y).
+%    evaluer_et_choisir(Plateau, CoupsPossible, Couleur, 3, Alpha, 2, Coup, CoupResultant).
+%    write("Salut 2 !\n"),
+%    write(CoupResultant),
+%    recupererX(CoupResultant, X),
+%    recupererY(CoupResultant, Y).
  
 % Demande à l’utilisateur de choisir un x y parmis les coupsPossible
 entrerCoup(CoupsPossible, X, Y) :-
