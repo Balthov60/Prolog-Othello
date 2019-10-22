@@ -2,6 +2,8 @@
 
 % Met dans RESULT la valeur LIST[X][Y]
 case(X, Y, LIST, RESULT) :-
+    X < 8, X >= 0,
+    Y < 8, Y >= 0,
     Z is X * 8 + Y,
     nth0(Z, LIST, RESULT).
     
@@ -26,8 +28,26 @@ count([],_,0).
 count([C|R],C,X) :- count(R,C,Y), X is 1+Y.
 count([_|R],C,X) :- count(R,C,X).
 
+% Var Primitive
+
+estEgal(A,B):-
+    A=B.
+
+estPleine(A) :-
+    A\=v.
+
+estVide(A) :-
+    A=v.
+
 recupererX([X|_], X).
 recupererY([_|A], Y) :-
     unlist(A, Y).
 
 unlist([A], A).
+
+% Color Privite
+
+reverseCouleur(A, B) :-
+    (A = b -> B = n;
+        A = n -> B = b;
+    false).
