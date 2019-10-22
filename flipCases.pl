@@ -37,5 +37,7 @@ flipCases(Plateau,X1,Y1,X2,Y2, R):-
      ((X1 = X2) -> flipPionsSurLigne(Plateau, X1, Y1, Y2, R);
      (Y1 = Y2) -> flipPionsSurLigne(Plateau, Y1, X1, X2, R);
      flipsPionsDiag(Plateau,X1,Y1,X2,Y2, R)).  
+     
+ flipCases([v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, b, n, v, v, v, v, v, v, n, b, v, v, v, v, v, v, v, v, v, v, v,v, v, v, v, v, v, v, v,v, v, v, v, v, v, v, v], 3, 2, 3, 5, R). 
 
 
