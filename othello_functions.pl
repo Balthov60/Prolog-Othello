@@ -9,7 +9,6 @@ initPlateau(Plateau) :-
 choixCoupPossible(Plateau, Couleur, CoupsPossible, X, Y) :-
     % DOING
     Alpha = 1,
-    write("temp Solution !\n"),
     recupererX(CoupsPossible, CoupResultant),
     recupererX(CoupResultant, X),
     recupererY(CoupResultant, Y).
@@ -30,6 +29,7 @@ entrerCoup(CoupsPossible, X, Y) :-
 placerPion(Plateau, Couleur, X, Y) :-
     ( case(X, Y, Plateau, V) ->
             remplace(X, Y, Couleur, Plateau, RESULT);
+            print_matrice(Plateau);
             Plateau is RESULT
     ; fail).
         
