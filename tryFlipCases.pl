@@ -96,6 +96,6 @@ croix(Plateau, X, Y, Couleur, [X1, Y1]) :-
     ((horizontale(Plateau, X, Y, Couleur, YTrouve), X1 is X, Y1 is YTrouve);
     (verticale(Plateau, X, Y, Couleur, XTrouve), X1 is XTrouve, Y1 is Y);
     (diagonale(Plateau, X, Y, Couleur, XTrouve, YTrouve), X1 is XTrouve, Y1 is YTrouve);),
-    flipCases(Plateaun X, Y, X1, Y1).
+    flipCases(Plateau, X, Y, X1, Y1).
 
 
