@@ -2,6 +2,8 @@
 
 % Met dans RESULT la valeur LIST[X][Y]
 case(X, Y, LIST, RESULT) :-
+    X < 8, X >= 0,
+    Y < 8, Y >= 0,
     Z is X * 8 + Y,
     nth0(Z, LIST, RESULT).
     
