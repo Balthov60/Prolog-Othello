@@ -45,6 +45,24 @@ coordEnHautGauche(X,Y,X2,Y2):- X2 is X-1, Y2 is Y-1.
 
 
 listeCoupsPossibles(Plateau,Couleur,ListeCoupsPossibles):-
-    between(0,7,X), 
-    between(0,7,Y), 
-    coupPossible(Plateau,X,Y,Couleur),
+    listeCoupsPossiblesSousMethode(Plateau,Plateau,Couleur,ListeCoupsPossibles,_).
+
+listeCoupsPossiblesSousMethode(_,[],_,[],-1).
+
+listeCoupsPossiblesSousMethode(Plateau,[_|Reste],Couleur,ListeCoupsPossibles,N):-
+	listeCoupsPossiblesSousMethode(Plateau,Reste,Couleur,L2,NN),
+    N is NN+1,
+    mod(N,8,Y),
+    div(N,8,X),
+    majCoups(Plateau,X,Y,Couleur,L2,ListeCoupsPossibles).
+
+majCoups(Plateau,X,Y,Couleur,ListeCoupsPossibles,[[X,Y]|ListeCoupsPossibles]):-
+    coupPossible(Plateau,X,Y,Couleur).
+
+majCoups(_,_,_,_,ListeCoupsPossibles,ListeCoupsPossibles).
+
+
+% Z correspond à Y
+mod(A,B,Z):- Z is A mod B.
+% Z correspond à X
+div(A,B,Z):- Z is A//B.
