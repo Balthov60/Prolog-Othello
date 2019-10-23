@@ -173,6 +173,10 @@ evaluer_et_choisir([[X,Y]|CoupsPossibles], Plateau, Couleur, Profondeur, Drapeau
     update(NewPlateau, Value, Record, Record1),
     evaluer_et_choisir(CoupsPossibles, Plateau, Couleur, Profondeur, Drapeau, Record1, Result, HeuristicIndex).
 
+evaluer_et_choisir([[X,Y]|[]], Plateau, Couleur, _, _, Record, Record1, _) :-
+    placerPion(Plateau, Couleur, X, Y, NewPlateau),
+    update(NewPlateau, 0, Record, Record1).
+
 evaluer_et_choisir([], Plateau, Couleur, Profondeur, Drapeau, Record, Record, _).
 
 
