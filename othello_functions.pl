@@ -7,8 +7,8 @@ initPlateau(Plateau) :-
     Plateau = [v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, b, n, v, v, v, v, v, v, n, b, v, v, v, v, v, v, v, v, v, v, v,v, v, v, v, v, v, v, v,v, v, v, v, v, v, v, v].
 
 % Logique centrale : choisis un coup X,Y parmus coupsPossible
-choixCoupPossible(Plateau, Couleur, CoupsPossibles, PlateauResultant) :-
-    evaluer_et_choisir(CoupsPossibles, Plateau, Couleur, 3, 1, (nil, -1000), (PlateauResultant, _)),
+choixCoupPossible(Plateau, Couleur, CoupsPossibles, HeuristicIndex, PlateauResultant) :-
+    evaluer_et_choisir(CoupsPossibles, Plateau, Couleur, 3, 1, (nil, -1000), (PlateauResultant, _), HeuristicIndex),
     write("Salut 2 !\n"),
     print_matrice(PlateauResultant).
     %recupererX(CoupResultant, X),
@@ -167,24 +167,30 @@ recurFlipCases(Plateau, X1, Y1, [[X2|Y2]|T], Result) :-
 %%%%%%%%%%%%% 
 
 % Simple MINIMAX Algorithm
-evaluer_et_choisir([[X,Y]|CoupsPossibles], Plateau, Couleur, Profondeur, Drapeau, Record, Result) :-
+evaluer_et_choisir([[X,Y]|CoupsPossibles], Plateau, Couleur, Profondeur, Drapeau, Record, Result, HeuristicIndex) :-
     placerPion(Plateau, Couleur, X, Y, NewPlateau),
-    minimax(Profondeur, NewPlateau, Couleur, Drapeau, PlateauX, Value),
+    minimax(Profondeur, NewPlateau, Couleur, Drapeau, PlateauX, Value, HeuristicIndex),
     update(NewPlateau, Value, Record, Record1),
-    evaluer_et_choisir(CoupsPossibles, Plateau, Couleur, Profondeur, Drapeau, Record1, Result).
-evaluer_et_choisir([], Plateau, Couleur, Profondeur, Drapeau, Record, Record).
+    evaluer_et_choisir(CoupsPossibles, Plateau, Couleur, Profondeur, Drapeau, Record1, Result, HeuristicIndex).
 
-minimax(0, Plateau, Couleur, Drapeau, NewPlateau, Value) :-
-    heuristiqueMaximiserNombrePionsAlies(Plateau, Couleur, V),
+evaluer_et_choisir([], Plateau, Couleur, Profondeur, Drapeau, Record, Record, _).
+
+
+minimax(0, Plateau, Couleur, Drapeau, NewPlateau, Value, HeuristicIndex) :-
+    (HeuristicIndex = 1 -> heuristiqueDanger(Plateau, Couleur, V);
+    HeuristicIndex = 2 -> heuristiqueMaximiserNombrePionsAlies(Plateau, Couleur, V);
+    HeuristicIndex = 3 -> heuristiqueMinimiserCoupAdversaire(Plateau, Couleur, V);
+    HeuristicIndex = 4 -> hGroupePions(Plateau, Couleur, ScoreFin);
+    false),
     Value is V*Drapeau.
 
-minimax(Profondeur, Plateau, Couleur, Drapeau, NewPlateau, Value) :-
+minimax(Profondeur, Plateau, Couleur, Drapeau, NewPlateau, Value, HeuristicIndex) :-
     Profondeur > 0,
     reverseCouleur(Couleur, NewCouleur),
     listeCoupsPossibles(Plateau, NewCouleur, CoupsPossibles),
     NewProfondeur is Profondeur - 1,
     NewDrapeau is -Drapeau,
-    evaluer_et_choisir(CoupsPossibles, Plateau, NewCouleur, NewProfondeur, NewDrapeau, (nil, -1000), (NewPlateau, Value)).
+    evaluer_et_choisir(CoupsPossibles, Plateau, NewCouleur, NewProfondeur, NewDrapeau, (nil, -1000), (NewPlateau, Value), HeuristicIndex).
 
 update(NewPlateau, Value, (NewPlateau1, Value1), (NewPlateau1, Value1)) :-
     	Value =< Value1.

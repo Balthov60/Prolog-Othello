@@ -37,7 +37,7 @@ heuristiqueDanger(Plateau, Couleur, Score) :-
 
 calculerScore(_, _, [], _).
     
-calculerScore(Plateau, Score, [[X|Y]|T], ScoreResultat) :-
+calculerScore(Plateau, Score, [[X|Y]|T], gScoreResultat) :-
     valeurCase(X, Y, Valeur),
     dangerCase(X, Y, Danger),
     ScoreTemp is Score + Valeur - Danger,   
