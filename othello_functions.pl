@@ -186,7 +186,7 @@ minimax(0, Plateau, Couleur, Drapeau, NewPlateau, Value, HeuristicIndex) :-
     (HeuristicIndex = 1 -> heuristiqueDanger(Plateau, Couleur, V);
     HeuristicIndex = 2 -> heuristiqueMaximiserNombrePionsAlies(Plateau, Couleur, V);
     HeuristicIndex = 3 -> heuristiqueMinimiserCoupAdversaire(Plateau, Couleur, V);
-    HeuristicIndex = 4 -> hGroupePions(Plateau, Couleur, ScoreFin);
+    HeuristicIndex = 4 -> hGroupePions(Plateau, Couleur, V);
     false),
     Value is V*Drapeau.
 
