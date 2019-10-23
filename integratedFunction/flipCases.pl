@@ -1,51 +1,51 @@
-%%%%%%%%%%%%%%%%
-%% FLIP CASES %%
-%%%%%%%%%%%%%%%%
+case(X, Y, LIST, RESULT) :-
+    Z is X * 8 + Y,
+    nth0(Z , LIST, RESULT).
+ 
+replace(X, Y, N, L, R) :-
+    Z is X * 8 + Y,
+    nth0(Z, L, _, RR),
+    nth0(Z, R, N, RR).
 
-% Pour chaque direction essaye de flip une case
-tryFlipCases(Plateau, Couleur, X, Y) :-
-    % TODO
-    % Parcourir les 8 directions et trouver un pion x2, y2
-    % Pour chaque direction, si un pion x2, y2 trouvé, appeler:
-    % ListePionAFlip(plateau, x1, y1, x2, y2);
-    print('tryFlipCases').
-
-% Retourne les pions entre x1,y1 et x2,y2 nob inclus
-flipCases(Plateau, X1, Y1, Y2, Y2) :-
-     ((X1 is X2) -> flipPionsSurLigne(Plateau, X1, Y1, Y2);
-     (Y1 is Y2) -> flipPionsSurLigne(Plateau, Y1, X1, X2);
-     flipsPionsDiag(Plateau,X1,Y1,X2,Y2)).
-
-
-flipPionsSurLigne(Plateau, Dir, Borne1, Borne2) :- 
-    ((Borne2>Borne1) -> Borne_inf is Borne1+1, Borne_sup is Borne2-1, flipPionsVersDir(Plateau,Dir, Borne_inf, Borne_sup);
-     Borne_inf is Borne2+1, Borne_sup is Borne1-1,flipPionsVersDir(Plateau,Dir, Borne_inf, Borne_sup)).
+flipPion(Plateau, X, Y, R):-
+     case(X, Y, Plateau, Z),
+     (Z = 'n' -> replace(X, Y, 'b', Plateau, R);
+     Z = 'b' -> replace(X, Y, 'n', Plateau, R);
+     fail).        
      
-flipPionsVersDir(Plateau,Dir, Borne_inf, Borne_sup) :- 
-    between(Borne_inf, Borne_sup, I),
-    flipPion(Plateau,Dir,I),
-    false.
+flipPionsSurLigne(Plateau, Axe, Dir, Borne1, Borne2, R) :- 
+    ((Borne2>Borne1) -> Borne_inf is Borne1, Borne_sup is Borne2-1, flipPionsVersDir(Plateau,Axe,Dir, Borne_inf, Borne_sup, R);
+     Borne_inf is Borne2, Borne_sup is Borne1-1,flipPionsVersDir(Plateau,Axe,Dir, Borne_inf, Borne_sup, R)).
+    
+flipPionsVersDir(Plateau, Axe, Dir, Borne_sup, Borne_sup, Plateau).
+flipPionsVersDir(Plateau,Axe,Dir, Borne_inf, Borne_sup, R) :-
+    I is Borne_inf + 1,
+    (   Axe = x ->  flipPion(Plateau, Dir, I, R2);
+    flipPion(Plateau, I, Dir, R2)),
+    flipPionsVersDir(R2, Axe ,Dir, I, Borne_sup, R).
+    
      
-flipsPionsDiag(Plateau,X1,Y1,X2,Y2) :- 
-    ((X2>X1,Y2>Y1) ->  
-        flipsPionsDiagDir(Plateau,X1,Y1,X2,Y2);
-    (X2<X1,Y2<Y1) ->  
-        flipsPionsDiagDir(Plateau,X2,Y2,X1,Y1);
-    (X2>X1,Y2<Y1) ->  
-        flipsPionsDiagDir(Plateau,X1,Y2,X2,X1);
-        flipsPionsDiagDir(Plateau,X2,Y1,X1,Y2)).
-                              
-flipsPionsDiagDir(Plateau, Borne_inf_x, Borne_inf_y, Borne_sup_x, Borne_sup_y) :-
-    between(Borne_inf_x, Borne_sup_x, X),  
-    between(Borne_inf_y, Borne_sup_y, Y),
-    flipPion(Plateau,X,Y),
-    false,
-    false.
-       
-% Retourne le pion au coordonnée X, Y
-flipPion(Plateau, X, Y) :-
-   case(X, Y, Plateau, Z),
-   (Z = 'n' -> replace(X, Y, 'b', Plateau, r);
-   Z = 'b' -> replace(X, Y, 'n', Plateau, r);
-   fail),
-   Plateau is r.
+flipsPionsDiag(Plateau,X1,Y1,X2,Y2, R):- ((X2>X1,Y2>Y1) ->  NbCases is X2-X1-1, flipsPionsDiagDir(Plateau,X1,Y1, xp, yp, NbCases,R);
+                              (X2<X1,Y2<Y1) -> NbCases is X1-X2-1, flipsPionsDiagDir(Plateau,X2,Y2,xp,yp,NbCases,R);
+                              (X2>X1,Y2<Y1) -> NbCases is X2-X1-1, flipsPionsDiagDir(Plateau,X1,Y1,xp, yn, NbCases,R);
+                              NbCases is X1-X2-1, flipsPionsDiagDir(Plateau,X1,Y1, xn, yp, NbCases,R)).
+     
+flipsPionsDiagDir(Plateau,Borne_inf_x,Borne_inf_y, Sens_X, Sens_Y, 0, Plateau). 
+    
+flipsPionsDiagDir(Plateau,Borne_inf_x,Borne_inf_y, Sens_X, Sens_Y, NbCases, R):- 
+    (   Sens_X = xp ->  I is Borne_inf_x + 1;
+    I is Borne_inf_x - 1),
+    (    Sens_Y = yp ->  J is Borne_inf_y + 1;
+    J is Borne_inf_y-1),
+    NbCasesNew is NbCases - 1,
+    flipPion(Plateau, I, J, R2),
+    flipsPionsDiagDir(R2,I,J, Sens_X, Sens_Y,NbCasesNew, R).
+    
+
+flipCases(Plateau,X1,Y1,X2,Y2, R):-
+     ((X1 = X2) -> flipPionsSurLigne(Plateau, x,  X1, Y1, Y2, R);
+     (Y1 = Y2) -> flipPionsSurLigne(Plateau, y, Y1, X1, X2, R);
+     flipsPionsDiag(Plateau,X1,Y1,X2,Y2, R)).
+ 
+ % ?- flipCases([v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, b, n, v, v, v, v, v, v, n, b, v, v, v, v, v, v, v, v, v, v, v,v, v, v, v, v, v, v, v,v, v, v, v, v, v, v, v], 3, 2, 3, 5, R). 
+
