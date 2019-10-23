@@ -36,9 +36,7 @@ roundLoop(Plateau, Color, PlayerType, HeuristicIndex, PreviousPlayed) :-
                 ; fail)
         ),      
         writeln('Fin Manche - Joué.'),
-        
         print_matrice(PlateauFinal),
-        writeln('test'),
         roundLoop(PlateauFinal, NewColor, PlayerType, HeuristicIndex, true)
     
     ; PreviousPlayed = true -> 
