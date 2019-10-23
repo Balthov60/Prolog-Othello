@@ -108,16 +108,15 @@ caseDiagonaleSO(X, Y, Plateau, Couleur, XResultat, YResultat) :-
 croix(Plateau, X, Y, Couleur, [X1|Y1]) :-
     ((horizontale(Plateau, X, Y, Couleur, YTrouve), X1 is X, Y1 is YTrouve);
     (verticale(Plateau, X, Y, Couleur, XTrouve), X1 is XTrouve, Y1 is Y);
-    (diagonale(Plateau, X, Y, Couleur, XTrouve, YTrouve), X1 is XTrouve, Y1 is YTrouve)).
+    (diagonale(Plateau, X, Y, Couleur, XTrouve, YTrouve), X1 is XTrouve, Y1 is YTrouve);
+    true).
     
 tryFlipCases(Plateau, X, Y, Couleur, PlateauResult) :-
     bagof(Coords, croix(Plateau, X, Y, Couleur, Coords), Liste),
-    recurFlipCase(Plateau, X, Y, Liste, PlateauResult).
+    listButLast(Liste, ListeButLast),
+    writeln(ListeButLast),
+    recurFlipCases(Plateau, X, Y, ListeButLast, PlateauResult).
 
-
-recurFlipCase(Plateau, X1, Y1, [[X2|Y2]|T], Result) :-
-    flipCases(Plateau, X1, Y1, X2, Y2, TempR),
-    recurFlipCase(TempR, X1, Y1, T, Result).
 %%%%%%%%%%%%%%%%
 %% FLIP CASES %%
 %%%%%%%%%%%%%%%%
@@ -141,9 +140,9 @@ flipPionsVersDir(Plateau,Axe,Dir, Borne_inf, Borne_sup, R) :-
     
      
 flipsPionsDiag(Plateau,X1,Y1,X2,Y2, R):- ((X2>X1,Y2>Y1) ->  NbCases is X2-X1-1, flipsPionsDiagDir(Plateau,X1,Y1, xp, yp, NbCases,R);
-                              (X2<X1,Y2<Y1) -> NbCases is X1-X2-1, flipsPionsDiagDir(Plateau,X2,Y2,xp,yp,NbCases,R);
-                              (X2>X1,Y2<Y1) -> NbCases is X2-X1-1, flipsPionsDiagDir(Plateau,X1,Y1,xp, yn, NbCases,R);
-                              NbCases is X1-X2-1, flipsPionsDiagDir(Plateau,X1,Y1, xn, yp, NbCases,R)).
+                                          (X2<X1,Y2<Y1) -> NbCases is X1-X2-1, flipsPionsDiagDir(Plateau,X2,Y2,xp,yp,NbCases,R);
+                                          (X2>X1,Y2<Y1) -> NbCases is X2-X1-1, flipsPionsDiagDir(Plateau,X1,Y1,xp, yn, NbCases,R);
+                                          NbCases is X1-X2-1, flipsPionsDiagDir(Plateau,X1,Y1, xn, yp, NbCases,R)).
      
 flipsPionsDiagDir(Plateau,Borne_inf_x,Borne_inf_y, Sens_X, Sens_Y, 0, Plateau). 
     
@@ -156,11 +155,13 @@ flipsPionsDiagDir(Plateau,Borne_inf_x,Borne_inf_y, Sens_X, Sens_Y, NbCases, R) :
     flipPion(Plateau, I, J, R2),
     flipsPionsDiagDir(R2,I,J, Sens_X, Sens_Y,NbCasesNew, R).
     
-flipCases(Plateau,X1,Y1,X2,Y2, R) :-
+flipCases(Plateau,X1, Y1, X2, Y2, R) :-
      ((X1 = X2) -> flipPionsSurLigne(Plateau, x,  X1, Y1, Y2, R);
      (Y1 = Y2) -> flipPionsSurLigne(Plateau, y, Y1, X1, X2, R);
      flipsPionsDiag(Plateau,X1,Y1,X2,Y2, R)).
-     
+
+recurFlipCases(Plateau, X1, Y1, [], Plateau).
+
 recurFlipCases(Plateau, X1, Y1, [[X2|Y2]|T], Result) :-
     flipCases(Plateau, X1, Y1, X2, Y2, TempR),
     recurFlipCases(TempR, X1, Y1, T, Result).
@@ -221,7 +222,7 @@ afficherResultat(Plateau) :-
     print_matrice(Plateau),
    	count(Plateau, b, B),
 	count(Plateau, n, N),
-    (N > B -> write('Les noirs ont gagné! '),write(N),write(' à '),write(B);
-   	B > N -> write('Les blancs ont gagné! '),write(B),write(' à '),write(N);
-   	B = N ->  write('Match nul! '),write(N),write(' partout.');
+    (N > B -> write('Les noirs ont gagné! '),write(N),write(' à '),write(B), write('\n');
+   	B > N -> write('Les blancs ont gagné! '),write(B),write(' à '),write(N), write('\n');
+   	B = N -> write('Match nul! '),write(N), write(' partout.'), write('\n');
    	fail).

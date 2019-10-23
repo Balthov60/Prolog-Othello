@@ -53,3 +53,12 @@ reverseCouleur(A, B) :-
     (A = b -> B = n;
         A = n -> B = b;
     false).
+    
+% List Primitive
+
+listButLast([X|Y], RList) :-                 
+   listButLastPrev(Y, RList, X).
+
+listButLastPrev([], [], _).
+listButLastPrev([X1|Y], [X0|RList], X0) :-  
+   listButLastPrev(Y, RList, X1).
