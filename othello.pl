@@ -33,21 +33,17 @@ roundLoop(Plateau, Color, PlayerType, PreviousPlayed) :-
         write('Player Type : '),
         write(PlayerType),
         (PlayerType = j -> 
-            entrerCoup(X, Y)
+            entrerCoup(X, Y),
+            placerPion(Plateau, Color, X, Y, PlateauFinal)
             ; (PlayerType = o ->
-                choixCoupPossible(Plateau, Color, CoupsPossible, X, Y)
+                choixCoupPossible(Plateau, Color, CoupsPossible, PlateauFinal)
                 ; fail)
         ),
-        choixCoupPossible(Plateau, Color, CoupsPossible, X, Y),
         
         write('Choix Coup Possible.. \n'),
-        write('X: '), write(X), write(' Y: '), write(Y), write('\n'),
-        
-        placerPion(Plateau, Color, X, Y, PlateauInte),
-        print_matrice(PlateauInte),
-        tryFlipCases(PlateauInte, X, Y, Color, PlateauFinal),
-        
+        write('X: '), write(X), write(' Y: '), write(Y), write('\n'),        
         print_matrice(PlateauFinal),
+        
         write('Fin Manche - Joué.\n'),
         roundLoop(PlateauFinal, NewColor, PlayerType, true)
     
