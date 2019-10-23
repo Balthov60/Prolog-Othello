@@ -2,11 +2,21 @@
 
 play :-
     initPlateau(Plateau),
+    
+    write('Joueur vs Ordi (entrer : j) ou Ordi vs Ordi (entrer : o)\n'),
+    read(Player),
+    
+    (Player = j -> 
+        write('Joueur vs Ordi \n')
+        ; (Player = o ->
+            write('Ordi vs Ordi \n')
+            ; fail)),
+            
     print_matrice(Plateau),
     write('Before Round Loop\n'),
-    roundLoop(Plateau, n, true).
+    roundLoop(Plateau, n, PlayerType, true).
     
-roundLoop(Plateau, Color, PreviousPlayed) :-
+roundLoop(Plateau, Color, PlayerType, PreviousPlayed) :-
     write('Début Manche : '),
     write(Color),
     write('\n'),
@@ -21,25 +31,30 @@ roundLoop(Plateau, Color, PreviousPlayed) :-
     (listeNonVide(CoupsPossible) ->
         write('Joueur Joue... \n'),
 
+        %(PlayerType = j -> 
+        %    entrerCoup(X, Y),
+        %    ; (PlayerType = o ->
+        %        choixCoupPossible(Plateau, Color, CoupsPossible, X, Y),
+        %        ; fail)
+        %),
         choixCoupPossible(Plateau, Color, CoupsPossible, X, Y),
+        
         write('Choix Coup Possible.. \n'),
         write('X: '), write(X), write(' Y: '), write(Y), write('\n'),
-        % OU entrerCoup(X, Y, CoupsPossible),
-
+        
         placerPion(Plateau, Color, X, Y, PlateauInte),
-
         write('tryFlipCases \n'),
         print_matrice(PlateauInte),
         tryFlipCases(PlateauInte, X, Y, Color, PlateauFinal),
         write('tryFlipCasesEnd \n')
     ; PreviousPlayed -> 
         write('Fin Manche - Non Joué.\n'),
-        roundLoop(PlateauFinal, NewColor, _)
+        roundLoop(PlateauFinal, NewColor, PlayerType, _)
         ; afficheResultat(PlateauFinal)
     ),
     print_matrice(PlateauFinal),
     write('Fin Manche - Joué.\n'),
-    roundLoop(PlateauFinal, NewColor, true).
+    roundLoop(PlateauFinal, NewColor, PlayerType, true).
     
 play_old :-
     initPlateau(Plateau),

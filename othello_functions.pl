@@ -19,11 +19,10 @@ choixCoupPossible(Plateau, Couleur, CoupsPossible, X, Y) :-
 %    recupererX(CoupResultant, X),
 %    recupererY(CoupResultant, Y).
  
-% Demande à l’utilisateur de choisir un x y parmis les coupsPossible
-entrerCoup(CoupsPossible, X, Y) :-
-    % TODO
-    X is 0,
-    Y is 0.
+entrerCoup(X, Y) :-
+	writeln('Entrer coord X puis Y (0 <= X Y <= 7,) :'),
+	read(X),
+	read(Y).
 
 % placer un pion. Return false si autre statut que vide 
 % X,Y => Coordonnée, LIST => plateau, COULEUR => n(noir) ou b(blanc) en fonction du joueur
@@ -106,15 +105,14 @@ caseDiagonaleSO(X, Y, Plateau, Couleur, XResultat, YResultat) :-
     (estEgal(Couleur, CouleurTemporaire) -> caseDiagonaleSO(Xtemporaire, Ytemporaire, Plateau, Couleur, XResultat ,YResultat);
     estVide(CouleurTemporaire) -> XResultat is Xtemporaire ,YResultat is Ytemporaire).
 
-croix(Plateau, X, Y, Couleur, [X1, Y1]) :-
+croix(Plateau, X, Y, Couleur, [X1|Y1]) :-
     ((horizontale(Plateau, X, Y, Couleur, YTrouve), X1 is X, Y1 is YTrouve);
     (verticale(Plateau, X, Y, Couleur, XTrouve), X1 is XTrouve, Y1 is Y);
-    (diagonale(Plateau, X, Y, Couleur, XTrouve, YTrouve), X1 is XTrouve, Y1 is YTrouve);),
-    flipCases(Plateau, X, Y, X1, Y1).
-
+    (diagonale(Plateau, X, Y, Couleur, XTrouve, YTrouve), X1 is XTrouve, Y1 is YTrouve)).
+    
 tryFlipCases(Plateau, X, Y, Couleur, PlateauResult) :-
-    croix(Plateau, X, Y, Couleur, ListCoups),
-    % Pour chaque coup -> flipCases().
+    bagof(Coords, croix(Plateau, X, Y, Couleur, Coords), Liste),
+    recurFlipCase(Plateau, X, Y, Liste, PlateauResult).
 
 %%%%%%%%%%%%%%%%
 %% FLIP CASES %%
@@ -159,7 +157,11 @@ flipCases(Plateau,X1,Y1,X2,Y2, R) :-
      ((X1 = X2) -> flipPionsSurLigne(Plateau, x,  X1, Y1, Y2, R);
      (Y1 = Y2) -> flipPionsSurLigne(Plateau, y, Y1, X1, X2, R);
      flipsPionsDiag(Plateau,X1,Y1,X2,Y2, R)).
-   
+     
+recurFlipCases(Plateau, X1, Y1, [[X2|Y2]|T], Result) :-
+    flipCases(Plateau, X1, Y1, X2, Y2, TempR),
+    recurFlipCases(TempR, X1, Y1, T, Result).
+
 %%%%%%%%%%%%%
 %% Minimax %%
 %%%%%%%%%%%%%
