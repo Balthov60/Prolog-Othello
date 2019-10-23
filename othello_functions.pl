@@ -1,5 +1,6 @@
 :- consult(primitive).
 :- consult(listeCoupsPossibles).
+module(matrix).
 
 % Initialise le plateau dans plateau
 initPlateau(Plateau) :-
@@ -26,30 +27,12 @@ entrerCoup(CoupsPossible, X, Y) :-
 
 % placer un pion. Return false si autre statut que vide 
 % X,Y => Coordonnée, LIST => plateau, COULEUR => n(noir) ou b(blanc) en fonction du joueur
-placerPion(Plateau, Couleur, X, Y) :-
-    ( case(X, Y, Plateau, V) ->
-            remplace(X, Y, Couleur, Plateau, RESULT);
-            print_matrice(Plateau);
-            Plateau is RESULT
-    ; fail).
-        
+placerPion(Plateau, Couleur, X, Y, PlateauFinal) :-
+    remplace(X, Y, Couleur, Plateau, PlateauFinal).        
+
 %%%%%%%%%%%%%%%%%%%%
 %% TRY FLIP CASES %%
 %%%%%%%%%%%%%%%%%%%%
-
-estEgal(A,B):-
-    A=B.
-
-estPleine(A) :-
-    A\=v.
-
-estVide(A) :-
-    A=v.
-
-reverseCouleur(A, B) :-
-    (A = b -> B = n;
-        A = n -> B = b;
-    false).
 
 caseVerticaleBasse(X, Y, Plateau, Couleur, XResultat) :-
     Xtemporaire is X + 1,
@@ -123,55 +106,59 @@ caseDiagonaleSO(X, Y, Plateau, Couleur, XResultat, YResultat) :-
     (estEgal(Couleur, CouleurTemporaire) -> caseDiagonaleSO(Xtemporaire, Ytemporaire, Plateau, Couleur, XResultat ,YResultat);
     estVide(CouleurTemporaire) -> XResultat is Xtemporaire ,YResultat is Ytemporaire).
 
-% Pour chaque direction essaye de flip une case
-tryFlipCases(Plateau, Couleur, X, Y) :-
+croix(Plateau, X, Y, Couleur, [X1, Y1]) :-
     ((horizontale(Plateau, X, Y, Couleur, YTrouve), X1 is X, Y1 is YTrouve);
     (verticale(Plateau, X, Y, Couleur, XTrouve), X1 is XTrouve, Y1 is Y);
-    (diagonale(Plateau, X, Y, Couleur, XTrouve, YTrouve), X1 is XTrouve, Y1 is YTrouve)),
+    (diagonale(Plateau, X, Y, Couleur, XTrouve, YTrouve), X1 is XTrouve, Y1 is YTrouve);),
     flipCases(Plateau, X, Y, X1, Y1).
+
+tryFlipCases(Plateau, X, Y, Couleur, PlateauResult) :-
+    croix(Plateau, X, Y, Couleur, ListCoups),
+    % Pour chaque coup -> flipCases().
 
 %%%%%%%%%%%%%%%%
 %% FLIP CASES %%
 %%%%%%%%%%%%%%%%
 
-% Retourne les pions entre x1,y1 et x2,y2 nob inclus
-flipCases(Plateau, X1, Y1, Y2, Y2) :-
-     ((X1 is X2) -> flipPionsSurLigne(Plateau, X1, Y1, Y2);
-     (Y1 is Y2) -> flipPionsSurLigne(Plateau, Y1, X1, X2);
-     flipsPionsDiag(Plateau,X1,Y1,X2,Y2)).
+flipPion(Plateau, X, Y, R):-
+     case(X, Y, Plateau, Z),
+     (Z = 'n' -> remplace(X, Y, 'b', Plateau, R);
+     Z = 'b' -> remplace(X, Y, 'n', Plateau, R);
+     fail).        
+     
+flipPionsSurLigne(Plateau, Axe, Dir, Borne1, Borne2, R) :- 
+    ((Borne2>Borne1) -> Borne_inf is Borne1, Borne_sup is Borne2-1, flipPionsVersDir(Plateau,Axe,Dir, Borne_inf, Borne_sup, R);
+     Borne_inf is Borne2, Borne_sup is Borne1-1,flipPionsVersDir(Plateau,Axe,Dir, Borne_inf, Borne_sup, R)).
+    
+flipPionsVersDir(Plateau, Axe, Dir, Borne_sup, Borne_sup, Plateau).
+flipPionsVersDir(Plateau,Axe,Dir, Borne_inf, Borne_sup, R) :-
+    I is Borne_inf + 1,
+    (   Axe = x ->  flipPion(Plateau, Dir, I, R2);
+    flipPion(Plateau, I, Dir, R2)),
+    flipPionsVersDir(R2, Axe ,Dir, I, Borne_sup, R).
+    
+     
+flipsPionsDiag(Plateau,X1,Y1,X2,Y2, R):- ((X2>X1,Y2>Y1) ->  NbCases is X2-X1-1, flipsPionsDiagDir(Plateau,X1,Y1, xp, yp, NbCases,R);
+                              (X2<X1,Y2<Y1) -> NbCases is X1-X2-1, flipsPionsDiagDir(Plateau,X2,Y2,xp,yp,NbCases,R);
+                              (X2>X1,Y2<Y1) -> NbCases is X2-X1-1, flipsPionsDiagDir(Plateau,X1,Y1,xp, yn, NbCases,R);
+                              NbCases is X1-X2-1, flipsPionsDiagDir(Plateau,X1,Y1, xn, yp, NbCases,R)).
+     
+flipsPionsDiagDir(Plateau,Borne_inf_x,Borne_inf_y, Sens_X, Sens_Y, 0, Plateau). 
+    
+flipsPionsDiagDir(Plateau,Borne_inf_x,Borne_inf_y, Sens_X, Sens_Y, NbCases, R):- 
+    (   Sens_X = xp ->  I is Borne_inf_x + 1;
+    I is Borne_inf_x - 1),
+    (    Sens_Y = yp ->  J is Borne_inf_y + 1;
+    J is Borne_inf_y-1),
+    NbCasesNew is NbCases - 1,
+    flipPion(Plateau, I, J, R2),
+    flipsPionsDiagDir(R2,I,J, Sens_X, Sens_Y,NbCasesNew, R).
+    
 
-flipPionsSurLigne(Plateau, Dir, Borne1, Borne2) :- 
-    ((Borne2>Borne1) -> Borne_inf is Borne1+1, Borne_sup is Borne2-1, flipPionsVersDir(Plateau,Dir, Borne_inf, Borne_sup);
-     Borne_inf is Borne2+1, Borne_sup is Borne1-1,flipPionsVersDir(Plateau,Dir, Borne_inf, Borne_sup)).
-     
-flipPionsVersDir(Plateau,Dir, Borne_inf, Borne_sup) :- 
-    between(Borne_inf, Borne_sup, I),
-    flipPion(Plateau,Dir,I),
-    false.
-     
-flipsPionsDiag(Plateau,X1,Y1,X2,Y2) :- 
-    ((X2>X1,Y2>Y1) ->  
-        flipsPionsDiagDir(Plateau,X1,Y1,X2,Y2);
-    (X2<X1,Y2<Y1) ->  
-        flipsPionsDiagDir(Plateau,X2,Y2,X1,Y1);
-    (X2>X1,Y2<Y1) ->  
-        flipsPionsDiagDir(Plateau,X1,Y2,X2,X1);
-        flipsPionsDiagDir(Plateau,X2,Y1,X1,Y2)).
-                              
-flipsPionsDiagDir(Plateau, Borne_inf_x, Borne_inf_y, Borne_sup_x, Borne_sup_y) :-
-    between(Borne_inf_x, Borne_sup_x, X),  
-    between(Borne_inf_y, Borne_sup_y, Y),
-    flipPion(Plateau,X,Y),
-    false,
-    false.
-       
-% Retourne le pion au coordonnée X, Y
-flipPion(Plateau, X, Y) :-
-   case(X, Y, Plateau, Z),
-   (Z = 'n' -> replace(X, Y, 'b', Plateau, r);
-   Z = 'b' -> replace(X, Y, 'n', Plateau, r);
-   fail),
-   Plateau is r.
+flipCases(Plateau,X1,Y1,X2,Y2, R) :-
+     ((X1 = X2) -> flipPionsSurLigne(Plateau, x,  X1, Y1, Y2, R);
+     (Y1 = Y2) -> flipPionsSurLigne(Plateau, y, Y1, X1, X2, R);
+     flipsPionsDiag(Plateau,X1,Y1,X2,Y2, R)).
    
 %%%%%%%%%%%%%
 %% Minimax %%

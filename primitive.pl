@@ -38,6 +38,8 @@ estPleine(A) :-
 
 estVide(A) :-
     A=v.
+    
+affectation(A, A).
 
 recupererX([X|_], X).
 recupererY([_|A], Y) :-
@@ -45,7 +47,7 @@ recupererY([_|A], Y) :-
 
 unlist([A], A).
 
-% Color Privite
+% Color Primitive
 
 reverseCouleur(A, B) :-
     (A = b -> B = n;

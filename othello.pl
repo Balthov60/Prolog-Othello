@@ -3,6 +3,47 @@
 play :-
     initPlateau(Plateau),
     print_matrice(Plateau),
+    write('Before Round Loop\n'),
+    roundLoop(Plateau, n, true).
+    
+roundLoop(Plateau, Color, PreviousPlayed) :-
+    write('Début Manche : '),
+    write(Color),
+    write('\n'),
+
+    reverseCouleur(Color, NewColor),
+    listeCoupsPossibles(Plateau, Color, CoupsPossible),
+    write('Coup Possible : '),
+    write(CoupsPossible),
+    write('\n'),
+    read(_),
+
+    (listeNonVide(CoupsPossible) ->
+        write('Joueur Joue... \n'),
+
+        choixCoupPossible(Plateau, Color, CoupsPossible, X, Y),
+        write('Choix Coup Possible.. \n'),
+        write('X: '), write(X), write(' Y: '), write(Y), write('\n'),
+        % OU entrerCoup(X, Y, CoupsPossible),
+
+        placerPion(Plateau, Color, X, Y, PlateauInte),
+
+        write('tryFlipCases \n'),
+        print_matrice(PlateauInte),
+        tryFlipCases(PlateauInte, X, Y, Color, PlateauFinal),
+        write('tryFlipCasesEnd \n')
+    ; PreviousPlayed -> 
+        write('Fin Manche - Non Joué.\n'),
+        roundLoop(PlateauFinal, NewColor, _)
+        ; afficheResultat(PlateauFinal)
+    ),
+    print_matrice(PlateauFinal),
+    write('Fin Manche - Joué.\n'),
+    roundLoop(PlateauFinal, NewColor, true).
+    
+play_old :-
+    initPlateau(Plateau),
+    print_matrice(Plateau),
     
     write('Before Repeat\n'),
     repeat,
@@ -23,7 +64,7 @@ play :-
             write('X: '), write(X), write(' Y: '), write(Y), write('\n'),
             % OU entrerCoup(X, Y, CoupsPossibleNoir),
             
-            % placerPion(Plateau, n, X, Y), %% BACK HERE TODO ERROR
+            placerPion(Plateau, n, X, Y), %% BACK HERE TODO ERROR
             
             write('tryFlipCases\n'),
 	        % tryFlipCases(Plateau, n, X, Y),
