@@ -6,7 +6,7 @@ changerJoueur(Couleur, NouvelleCouleur) :-
 evaluer_et_choisir(Plateau, [[X|Y]|CoupsPossibles], Couleur, Profondeur, Alpha, Beta, MeilleurMouvementCourant, CoupResultant) :-
 	placerPion(Plateau, X, Y, Couleur),
 	alpha_beta(Profondeur, Plateau, Couleur, Alpha, Beta, MoveA, Valeur),
-	ValeurCourante = -Valeur,
+	ValeurCourante is -Valeur,
 	cutoff(MoveX, MoveY, ValeurCourante, Alpha, Beta, CoupsPossibles, Plateau, MeilleurMouvementCourant, CoupResultant).
 
 evaluer_et_choisir(Plateau, [], Couleur, Profondeur, Alpha, Beta, Coup, (Coup,Alpha)).	
@@ -16,9 +16,9 @@ alpha_beta(0, Plateau, Couleur, Alpha, Beta, Coup, Valeur) :-
 	
 alpha_beta(Profondeur, Plateau, Couleur, Alpha, Beta, [X|Y], Valeur) :-
 	listeCoupsPossibles(Plateau, Couleur, CoupsPossibles),
-	Alpha1 = -Beta,
-	Beta1 = -Alpha,
-	newProfondeur = Profondeur-1,
+	Alpha1 is -Beta,
+	Beta1 is -Alpha,
+	newProfondeur is Profondeur-1,
 	changerJoueur(Couleur,NouvelleCouleur), 
 	evaluer_et_choisir(CoupsPossibles, Plateau, NouvelleCouleur, newProfondeur, Alpha1, Beta1, nil, ([X|Y], Valeur)).
 	
