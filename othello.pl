@@ -9,16 +9,17 @@ play :-
     (PlayerType = j -> 
         write('Joueur vs Ordi \n')
         ; (PlayerType = o ->
-            write('Choix de l\'heuristique : (1, 2, 3)\n'),
+            write('Choix de l\'heuristique : (1, 2, 3, 4)\n'),
             read(HeuristicIndex),
-            write('Ordi vs Ordi \n')
+            write('Ordi vs Ordi : '), write(HeuristicIndex), 
+            write('\n')
             ; fail)),
             
     print_matrice(Plateau),
     write('Before Round Loop\n'),
-    roundLoop(Plateau, n, PlayerType, true).
+    roundLoop(Plateau, n, PlayerType, HeuristicIndex, true).
     
-roundLoop(Plateau, Color, PlayerType, PreviousPlayed) :-
+roundLoop(Plateau, Color, PlayerType, HeuristicIndex, PreviousPlayed) :-
     write('Début Manche : '),
     write(Color),
     write('\n'),
@@ -47,10 +48,10 @@ roundLoop(Plateau, Color, PlayerType, PreviousPlayed) :-
         print_matrice(PlateauFinal),
         
         write('Fin Manche - Joué.\n'),
-        roundLoop(PlateauFinal, NewColor, PlayerType, true)
+        roundLoop(PlateauFinal, NewColor, PlayerType, HeuristicIndex, true)
     
     ; PreviousPlayed = true -> 
         write('Fin Manche - Non Joué.\n'),
-        roundLoop(Plateau, NewColor, PlayerType, false)        
+        roundLoop(Plateau, NewColor, PlayerType, HeuristicIndex, false)        
         ; afficherResultat(Plateau)
     ).

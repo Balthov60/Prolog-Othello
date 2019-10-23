@@ -1,6 +1,5 @@
 :- consult(primitive).
 :- consult(listeCoupsPossibles).
-:- consult(Heuristique3).
 :- consult(HeuristiqueDanger).
 :- consult(HeuristiqueMaximiserPionsAlies).
 :- consult(HeuristiqueMinimiserCoupAdverse).
@@ -183,10 +182,11 @@ evaluer_et_choisir([], Plateau, Couleur, Profondeur, Drapeau, Record, Record, _)
 
 
 minimax(0, Plateau, Couleur, Drapeau, NewPlateau, Value, HeuristicIndex) :-
-    (HeuristicIndex = 1 -> heuristiqueDanger(Plateau, Couleur, V);
-    HeuristicIndex = 2 -> heuristiqueMaximiserNombrePionsAlies(Plateau, Couleur, V);
-    HeuristicIndex = 3 -> heuristiqueMinimiserCoupAdversaire(Plateau, Couleur, V);
-    HeuristicIndex = 4 -> hGroupePions(Plateau, Couleur, ScoreFin);
+    writeln(HeuristicIndex),
+    (HeuristicIndex is 1 -> writeln("heurD"), heuristiqueDanger(Plateau, Couleur, V);
+     HeuristicIndex is 2 -> writeln("heurMN"), heuristiqueMaximiserNombrePionsAlies(Plateau, Couleur, V);
+     HeuristicIndex is 3 -> writeln("heurMC"), heuristiqueMinimiserCoupAdversaire(Plateau, Couleur, V);
+     HeuristicIndex is 4 -> writeln("heurP"), hGroupePions(Plateau, Couleur, ScoreFin);
     false),
     Value is V*Drapeau.
 
