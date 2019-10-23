@@ -37,25 +37,25 @@ caseVerticaleBasse(X, Y, Plateau, Couleur, XResultat) :-
     Xtemporaire is X + 1,
     case(Xtemporaire, Y, Plateau, CouleurTemporaire),    
     (estEgal(Couleur, CouleurTemporaire) -> caseVerticaleBasse(Xtemporaire, Y, Plateau, Couleur, XResultat);
-    estVide(CouleurTemporaire) -> XResultat is Xtemporaire).
+    (not(estEgal(Couleur,CouleurTemporaire)), estPleine(CouleurTemporaire)) -> XResultat is Xtemporaire).
 
 caseVerticaleHaute(X, Y, Plateau, Couleur, XResultat) :-
     Xtemporaire is X - 1,
     case(Xtemporaire, Y, Plateau, CouleurTemporaire),    
     (estEgal(Couleur, CouleurTemporaire) -> caseVerticaleHaute(Xtemporaire, Y, Plateau, Couleur, XResultat);
-    estVide(CouleurTemporaire) -> XResultat is Xtemporaire).
+    (not(estEgal(Couleur,CouleurTemporaire)), estPleine(CouleurTemporaire)) -> XResultat is Xtemporaire).
 
 caseHorizontaleGauche(X, Y, Plateau, Couleur, YResultat) :-
     Ytemporaire is Y - 1,
     case(X, Ytemporaire, Plateau, CouleurTemporaire),    
     (estEgal(Couleur, CouleurTemporaire) -> caseHorizontaleGauche(X, Ytemporaire, Plateau, Couleur, YResultat);
-    estVide(CouleurTemporaire) -> YResultat is Ytemporaire).
+    (not(estEgal(Couleur,CouleurTemporaire)), estPleine(CouleurTemporaire)) -> YResultat is Ytemporaire).
 
 caseHorizontaleDroite(X, Y, Plateau, Couleur, YResultat) :-
     Ytemporaire is Y + 1,
     case(X, Ytemporaire, Plateau, CouleurTemporaire),    
     (estEgal(Couleur, CouleurTemporaire) -> caseHorizontaleDroite(X, Ytemporaire, Plateau, Couleur, YResultat);
-    estVide(CouleurTemporaire) -> YResultat is Ytemporaire).
+    (not(estEgal(Couleur,CouleurTemporaire)), estPleine(CouleurTemporaire)) -> YResultat is Ytemporaire).
 
 horizontale(Plateau, X, Y, Couleur, YTrouve) :-
     case(X, Y, Plateau, Couleur),
@@ -82,28 +82,28 @@ caseDiagonaleNE(X, Y, Plateau, Couleur, XResultat, YResultat) :-
     Xtemporaire is X - 1,
     case(Xtemporaire, Ytemporaire, Plateau, CouleurTemporaire),    
     (estEgal(Couleur, CouleurTemporaire) -> caseDiagonaleNE(Xtemporaire, Ytemporaire, Plateau, Couleur, XResultat ,YResultat);
-    estVide(CouleurTemporaire) -> XResultat is Xtemporaire ,YResultat is Ytemporaire).
+    (not(estEgal(Couleur,CouleurTemporaire)), estPleine(CouleurTemporaire)) -> XResultat is Xtemporaire ,YResultat is Ytemporaire).
 
 caseDiagonaleNO(X, Y, Plateau, Couleur, XResultat, YResultat) :-
     Ytemporaire is Y - 1,
     Xtemporaire is X - 1,
     case(Xtemporaire, Ytemporaire, Plateau, CouleurTemporaire),    
     (estEgal(Couleur, CouleurTemporaire) -> caseDiagonaleNO(Xtemporaire, Ytemporaire, Plateau, Couleur, XResultat ,YResultat);
-    estVide(CouleurTemporaire) -> XResultat is Xtemporaire ,YResultat is Ytemporaire).
+    (not(estEgal(Couleur,CouleurTemporaire)), estPleine(CouleurTemporaire)) -> XResultat is Xtemporaire ,YResultat is Ytemporaire).
 
 caseDiagonaleSE(X, Y, Plateau, Couleur, XResultat, YResultat) :-
     Ytemporaire is Y + 1,
     Xtemporaire is X + 1,
     case(Xtemporaire, Ytemporaire, Plateau, CouleurTemporaire),    
     (estEgal(Couleur, CouleurTemporaire) -> caseDiagonaleSE(Xtemporaire, Ytemporaire, Plateau, Couleur, XResultat ,YResultat);
-    estVide(CouleurTemporaire) -> XResultat is Xtemporaire ,YResultat is Ytemporaire).
+    (not(estEgal(Couleur,CouleurTemporaire)), estPleine(CouleurTemporaire)) -> XResultat is Xtemporaire ,YResultat is Ytemporaire).
 
 caseDiagonaleSO(X, Y, Plateau, Couleur, XResultat, YResultat) :-
     Ytemporaire is Y - 1,
     Xtemporaire is X + 1,
     case(Xtemporaire, Ytemporaire, Plateau, CouleurTemporaire),    
     (estEgal(Couleur, CouleurTemporaire) -> caseDiagonaleSO(Xtemporaire, Ytemporaire, Plateau, Couleur, XResultat ,YResultat);
-    estVide(CouleurTemporaire) -> XResultat is Xtemporaire ,YResultat is Ytemporaire).
+    (not(estEgal(Couleur,CouleurTemporaire)), estPleine(CouleurTemporaire)) -> XResultat is Xtemporaire ,YResultat is Ytemporaire).
 
 croix(Plateau, X, Y, Couleur, [X1|Y1]) :-
     ((horizontale(Plateau, X, Y, Couleur, YTrouve), X1 is X, Y1 is YTrouve);
@@ -114,6 +114,10 @@ tryFlipCases(Plateau, X, Y, Couleur, PlateauResult) :-
     bagof(Coords, croix(Plateau, X, Y, Couleur, Coords), Liste),
     recurFlipCase(Plateau, X, Y, Liste, PlateauResult).
 
+
+recurFlipCase(Plateau, X1, Y1, [[X2|Y2]|T], Result) :-
+    flipCases(Plateau, X1, Y1, X2, Y2, TempR),
+    recurFlipCase(TempR, X1, Y1, T, Result).
 %%%%%%%%%%%%%%%%
 %% FLIP CASES %%
 %%%%%%%%%%%%%%%%
@@ -143,16 +147,15 @@ flipsPionsDiag(Plateau,X1,Y1,X2,Y2, R):- ((X2>X1,Y2>Y1) ->  NbCases is X2-X1-1, 
      
 flipsPionsDiagDir(Plateau,Borne_inf_x,Borne_inf_y, Sens_X, Sens_Y, 0, Plateau). 
     
-flipsPionsDiagDir(Plateau,Borne_inf_x,Borne_inf_y, Sens_X, Sens_Y, NbCases, R):- 
-    (   Sens_X = xp ->  I is Borne_inf_x + 1;
+flipsPionsDiagDir(Plateau,Borne_inf_x,Borne_inf_y, Sens_X, Sens_Y, NbCases, R) :- 
+    (Sens_X = xp -> I is Borne_inf_x + 1;
     I is Borne_inf_x - 1),
-    (    Sens_Y = yp ->  J is Borne_inf_y + 1;
+    (Sens_Y = yp -> J is Borne_inf_y + 1;
     J is Borne_inf_y-1),
     NbCasesNew is NbCases - 1,
     flipPion(Plateau, I, J, R2),
     flipsPionsDiagDir(R2,I,J, Sens_X, Sens_Y,NbCasesNew, R).
     
-
 flipCases(Plateau,X1,Y1,X2,Y2, R) :-
      ((X1 = X2) -> flipPionsSurLigne(Plateau, x,  X1, Y1, Y2, R);
      (Y1 = Y2) -> flipPionsSurLigne(Plateau, y, Y1, X1, X2, R);
