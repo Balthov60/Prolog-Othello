@@ -1,6 +1,6 @@
 % change la couleur courante (enfin, is supposed to. aux erreurs près ¯\_(ツ)_/¯)
-changerJoueur(Couleur) :- 
-	(Couleur = b -> Couleur = n ; Couleur = n -> Couleur = b).
+changerJoueur(Couleur, NouvelleCouleur) :- 
+	(Couleur = b -> NouvelleCouleur = n ; Couleur = n -> NouvelleCouleur = b).
 
 % MINIMAX Algorithm avec élagage alpha_beta
 evaluer_et_choisir(Plateau, [[X|Y]|CoupsPossibles], Couleur, Profondeur, Alpha, Beta, MeilleurMouvementCourant, CoupResultant) :-
@@ -19,8 +19,8 @@ alpha_beta(Profondeur, Plateau, Couleur, Alpha, Beta, [X|Y], Valeur) :-
 	Alpha1 = -Beta,
 	Beta1 = -Alpha,
 	newProfondeur = Profondeur-1,
-	changerJoueur(Couleur), 
-	evaluer_et_choisir(CoupsPossibles, Plateau, Couleur, newProfondeur, Alpha1, Beta1, nil, ([X|Y], Valeur)).
+	changerJoueur(Couleur,NouvelleCouleur), 
+	evaluer_et_choisir(CoupsPossibles, Plateau, NouvelleCouleur, newProfondeur, Alpha1, Beta1, nil, ([X|Y], Valeur)).
 	
 cutoff(Coup, Valeur, Profondeur, Alpha, Beta, CoupsPossibles, Plateau, Couleur, MeilleurMouvementCourant, (Coup, Valeur)) :-
 	Value >= Beta.
