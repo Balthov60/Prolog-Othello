@@ -1,5 +1,11 @@
 :- consult(primitive).
 :- consult(listeCoupsPossibles).
+:- consult(Heuristique3).
+:- consult(HeuristiqueDanger).
+:- consult(HeuristiqueMaximiserPionsAlies).
+:- consult(HeuristiqueMinimiserCoupAdverse).
+:- consult(heuristiquesGrouperPions).
+
 module(matrix).
 
 % Initialise le plateau dans plateau

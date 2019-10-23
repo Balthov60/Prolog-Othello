@@ -9,6 +9,8 @@ play :-
     (PlayerType = j -> 
         write('Joueur vs Ordi \n')
         ; (PlayerType = o ->
+            write('Choix de l\'heuristique : (1, 2, 3)\n'),
+            read(HeuristicIndex),
             write('Ordi vs Ordi \n')
             ; fail)),
             
@@ -29,14 +31,14 @@ roundLoop(Plateau, Color, PlayerType, PreviousPlayed) :-
 
     (listeNonVide(CoupsPossible) ->
         write('Joueur Joue... \n'),
-
         write('Player Type : '),
         write(PlayerType),
+        
         (PlayerType = j -> 
             entrerCoup(X, Y),
             placerPion(Plateau, Color, X, Y, PlateauFinal)
             ; (PlayerType = o ->
-                choixCoupPossible(Plateau, Color, CoupsPossible, PlateauFinal)
+                choixCoupPossible(Plateau, Color, CoupsPossible, HeuristicIndex, PlateauFinal)
                 ; fail)
         ),
         
