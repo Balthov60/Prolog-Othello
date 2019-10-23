@@ -26,7 +26,6 @@ roundLoop(Plateau, Color, PlayerType, PreviousPlayed) :-
     write('Coup Possible : '),
     write(CoupsPossible),
     write('\n'),
-    read(_),
 
     (listeNonVide(CoupsPossible) ->
         write('Joueur Joue... \n'),
@@ -49,9 +48,11 @@ roundLoop(Plateau, Color, PlayerType, PreviousPlayed) :-
         write('tryFlipCasesEnd \n')
     ; PreviousPlayed = true -> 
         write('Fin Manche - Non Joué.\n'),
+        !, 
         roundLoop(Plateau, NewColor, PlayerType, false)
-        ; afficherResultat(PlateauFinal)
+        ; !, afficherResultat(PlateauFinal)
     ),
+    !, 
     print_matrice(PlateauFinal),
     write('Fin Manche - Joué.\n'),
     roundLoop(PlateauFinal, NewColor, PlayerType, true).
@@ -109,7 +110,6 @@ play_old :-
             write('tryFlipCasesEnd\n')
         ),
         print_matrice(Plateau),
-    
         write('fin Manche\n')
     ), 
     testFinPartie(Plateau),

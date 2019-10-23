@@ -56,9 +56,9 @@ reverseCouleur(A, B) :-
     
 % List Primitive
 
-list_butlast([X|Xs], Ys) :-                 % use auxiliary predicate ...
-   list_butlast_prev(Xs, Ys, X).            % ... which lags behind by one item
+listButLast([X|Y], RList) :-                 
+   listButLastPrev(Y, RList, X).
 
-list_butlast_prev([], [], _).
-list_butlast_prev([X1|Xs], [X0|Ys], X0) :-  
-   list_butlast_prev(Xs, Ys, X1).
+listButLastPrev([], [], _).
+listButLastPrev([X1|Y], [X0|RList], X0) :-  
+   listButLastPrev(Y, RList, X1).

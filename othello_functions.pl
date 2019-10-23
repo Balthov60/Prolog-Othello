@@ -113,7 +113,7 @@ croix(Plateau, X, Y, Couleur, [X1|Y1]) :-
     
 tryFlipCases(Plateau, X, Y, Couleur, PlateauResult) :-
     bagof(Coords, croix(Plateau, X, Y, Couleur, Coords), Liste),
-    list_butlast(Liste, ListeButLast),
+    listButLast(Liste, ListeButLast),
     writeln(ListeButLast),
     recurFlipCases(Plateau, X, Y, ListeButLast, PlateauResult).
 
@@ -222,7 +222,7 @@ afficherResultat(Plateau) :-
     print_matrice(Plateau),
    	count(Plateau, b, B),
 	count(Plateau, n, N),
-    (N > B -> write('Les noirs ont gagné! '),write(N),write(' à '),write(B);
-   	B > N -> write('Les blancs ont gagné! '),write(B),write(' à '),write(N);
-   	B = N ->  write('Match nul! '),write(N),write(' partout.');
+    (N > B -> write('Les noirs ont gagné! '),write(N),write(' à '),write(B), write('\n');
+   	B > N -> write('Les blancs ont gagné! '),write(B),write(' à '),write(N), write('\n');
+   	B = N -> write('Match nul! '),write(N), write(' partout.'), write('\n');
    	fail).
