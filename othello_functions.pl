@@ -13,11 +13,7 @@ initPlateau(Plateau) :-
 
 % Logique centrale : choisis un coup X,Y parmus coupsPossible
 choixCoupPossible(Plateau, Couleur, CoupsPossibles, HeuristicIndex, PlateauResultant) :-
-    evaluer_et_choisir(CoupsPossibles, Plateau, Couleur, 3, 1, (nil, -1000), (PlateauResultant, _), HeuristicIndex),
-    write("Salut 2 !\n"),
-    print_matrice(PlateauResultant).
-    %recupererX(CoupResultant, X),
-    %recupererY(CoupResultant, Y).
+    evaluer_et_choisir(CoupsPossibles, Plateau, Couleur, 2, 1, (nil, -1000), (PlateauResultant, _), HeuristicIndex).
  
 entrerCoup(X, Y) :-
 	writeln('Entrer coord X puis Y (0 <= X Y <= 7,) :'),
@@ -115,7 +111,6 @@ croix(Plateau, X, Y, Couleur, [X1|Y1]) :-
 tryFlipCases(Plateau, X, Y, Couleur, PlateauResult) :-
     bagof(Coords, croix(Plateau, X, Y, Couleur, Coords), Liste),
     listButLast(Liste, ListeButLast),
-    writeln(ListeButLast),
     recurFlipCases(Plateau, X, Y, ListeButLast, PlateauResult).
 
 %%%%%%%%%%%%%%%%

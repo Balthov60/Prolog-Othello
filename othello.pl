@@ -20,34 +20,24 @@ play :-
     roundLoop(Plateau, n, PlayerType, HeuristicIndex, true).
     
 roundLoop(Plateau, Color, PlayerType, HeuristicIndex, PreviousPlayed) :-
-    write('Début Manche : '),
-    write(Color),
-    write('\n'),
+    write('Début Manche : '), write(PlayerType), write(" "), writeln(Color),
 
     reverseCouleur(Color, NewColor),
     listeCoupsPossibles(Plateau, Color, CoupsPossible),
     write('Coup Possible : '),
-    write(CoupsPossible),
-    write('\n'),
+    writeln(CoupsPossible),
 
-    (listeNonVide(CoupsPossible) ->
-        write('Joueur Joue... \n'),
-        write('Player Type : '),
-        write(PlayerType),
-        
+    (listeNonVide(CoupsPossible) ->        
         (PlayerType = j -> 
             entrerCoup(X, Y),
             placerPion(Plateau, Color, X, Y, PlateauFinal)
             ; (PlayerType = o ->
                 choixCoupPossible(Plateau, Color, CoupsPossible, HeuristicIndex, PlateauFinal)
                 ; fail)
-        ),
-        
-        write('Choix Coup Possible.. \n'),
-        write('X: '), write(X), write(' Y: '), write(Y), write('\n'),        
+        ),      
+        write('Fin Manche - Joué.\n'),
         print_matrice(PlateauFinal),
         
-        write('Fin Manche - Joué.\n'),
         roundLoop(PlateauFinal, NewColor, PlayerType, HeuristicIndex, true)
     
     ; PreviousPlayed = true -> 
