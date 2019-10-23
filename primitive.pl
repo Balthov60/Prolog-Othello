@@ -53,3 +53,12 @@ reverseCouleur(A, B) :-
     (A = b -> B = n;
         A = n -> B = b;
     false).
+    
+% List Primitive
+
+list_butlast([X|Xs], Ys) :-                 % use auxiliary predicate ...
+   list_butlast_prev(Xs, Ys, X).            % ... which lags behind by one item
+
+list_butlast_prev([], [], _).
+list_butlast_prev([X1|Xs], [X0|Ys], X0) :-  
+   list_butlast_prev(Xs, Ys, X1).

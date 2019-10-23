@@ -47,10 +47,10 @@ roundLoop(Plateau, Color, PlayerType, PreviousPlayed) :-
         print_matrice(PlateauInte),
         tryFlipCases(PlateauInte, X, Y, Color, PlateauFinal),
         write('tryFlipCasesEnd \n')
-    ; PreviousPlayed -> 
+    ; PreviousPlayed = true -> 
         write('Fin Manche - Non Joué.\n'),
-        roundLoop(PlateauFinal, NewColor, PlayerType, _)
-        ; afficheResultat(PlateauFinal)
+        roundLoop(Plateau, NewColor, PlayerType, false)
+        ; afficherResultat(PlateauFinal)
     ),
     print_matrice(PlateauFinal),
     write('Fin Manche - Joué.\n'),
