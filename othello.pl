@@ -52,5 +52,5 @@ roundLoop(Plateau, Color, PlayerType, PreviousPlayed) :-
     ; PreviousPlayed = true -> 
         write('Fin Manche - Non Joué.\n'),
         roundLoop(Plateau, NewColor, PlayerType, false)        
-        ; afficherResultat(PlateauFinal)
+        ; afficherResultat(Plateau)
     ).
