@@ -7,17 +7,12 @@ initPlateau(Plateau) :-
     Plateau = [v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, b, n, v, v, v, v, v, v, n, b, v, v, v, v, v, v, v, v, v, v, v,v, v, v, v, v, v, v, v,v, v, v, v, v, v, v, v].
 
 % Logique centrale : choisis un coup X,Y parmus coupsPossible
-choixCoupPossible(Plateau, Couleur, CoupsPossible, X, Y) :-
-    % DOING
-    Alpha = 1,
-    recupererX(CoupsPossible, CoupResultant),
-    recupererX(CoupResultant, X),
-    recupererY(CoupResultant, Y).
-%    evaluer_et_choisir(Plateau, CoupsPossible, Couleur, 3, Alpha, 2, Coup, CoupResultant).
-%    write("Salut 2 !\n"),
-%    write(CoupResultant),
-%    recupererX(CoupResultant, X),
-%    recupererY(CoupResultant, Y).
+choixCoupPossible(Plateau, Couleur, CoupsPossibles, PlateauResultant) :-
+    evaluer_et_choisir(CoupsPossibles, Plateau, Couleur, 3, 1, (nil, -1000), (PlateauResultant, _)),
+    write("Salut 2 !\n"),
+    print_matrice(PlateauResultant).
+    %recupererX(CoupResultant, X),
+    %recupererY(CoupResultant, Y).
  
 entrerCoup(X, Y) :-
 	writeln('Entrer coord X puis Y (0 <= X Y <= 7,) :'),
@@ -168,43 +163,33 @@ recurFlipCases(Plateau, X1, Y1, [[X2|Y2]|T], Result) :-
 
 %%%%%%%%%%%%%
 %% Minimax %%
-%%%%%%%%%%%%%
-   
-% change la couleur courante (enfin, is supposed to. aux erreurs près ¯\_(ツ)_/¯)
-changerJoueur(Couleur) :- 
-	(Couleur = b -> Couleur = n ; Couleur = n -> Couleur = b).
+%%%%%%%%%%%%% 
 
-% MINIMAX Algorithm avec élagage alpha_beta
-evaluer_et_choisir(Plateau, [[X|Y]|CoupsPossibles], Couleur, Profondeur, Alpha, Beta, MeilleurMouvementCourant, CoupResultant) :-
-	placerPion(Plateau, Couleur, X, Y),
-	alpha_beta(Profondeur, Plateau, Couleur, Alpha, Beta, MoveA, Valeur),
-	ValeurCourante = -Valeur,
-	cutoff(MoveX, MoveY, ValeurCourante, Alpha, Beta, CoupsPossibles, Plateau, MeilleurMouvementCourant, CoupResultant).
+% Simple MINIMAX Algorithm
+evaluer_et_choisir([[X,Y]|CoupsPossibles], Plateau, Couleur, Profondeur, Drapeau, Record, Result) :-
+    placerPion(Plateau, Couleur, X, Y, NewPlateau),
+    minimax(Profondeur, NewPlateau, Couleur, Drapeau, PlateauX, Value),
+    update(NewPlateau, Value, Record, Record1),
+    evaluer_et_choisir(CoupsPossibles, Plateau, Couleur, Profondeur, Drapeau, Record1, Result).
+evaluer_et_choisir([], Plateau, Couleur, Profondeur, Drapeau, Record, Record).
 
-evaluer_et_choisir(Plateau, [], Couleur, Profondeur, Alpha, Beta, Coup, (Coup,Alpha)).	
+minimax(0, Plateau, Couleur, Drapeau, NewPlateau, Value) :-
+    heuristiqueMaximiserNombrePionsAlies(Plateau, Couleur, V),
+    Value is V*Drapeau.
 
-alpha_beta(0, Plateau, Couleur, Alpha, Beta, Coup, Valeur) :-
-	heuristique(Plateau, Valeur).
-	
-alpha_beta(Profondeur, Plateau, Couleur, Alpha, Beta, [X|Y], Valeur) :-
-	listeCoupsPossibles(Plateau, Couleur, CoupsPossibles),
-	Alpha1 = -Beta,
-	Beta1 = -Alpha,
-	newProfondeur = Profondeur-1,
-	changerJoueur(Couleur), 
-	evaluer_et_choisir(CoupsPossibles, Plateau, Couleur, newProfondeur, Alpha1, Beta1, nil, ([X|Y], Valeur)).
-	
-cutoff(Coup, Valeur, Profondeur, Alpha, Beta, CoupsPossibles, Plateau, Couleur, MeilleurMouvementCourant, (Coup, Valeur)) :-
-	Value >= Beta.
-	
-cutoff(Coup, Valeur, Profondeur, Alpha, Beta, Plateau, Couleur, MeilleurMouvementCourant, CoupResultant) :-
-	Alpha < Valeur, 
-    Valeur < Beta,
-	evaluer_et_choisir(CoupsPossibles, Plateau, Couleur, Valeur, Beta, Coup, CoupResultant).
-	
-cutoff(Coup, Valeur, Profondeur, Alpha, Beta, CoupsPossibles, Plateau, Couleur, MeilleurMouvementCourant, CoupResultant) :-
-	Valeur =< Alpha,
-	evaluer_et_choisir(CoupsPossibles, Plateau, Couleur, Profondeur, Alpha, Beta, MeilleurMouvementCourant, CoupResultant).
+minimax(Profondeur, Plateau, Couleur, Drapeau, NewPlateau, Value) :-
+    Profondeur > 0,
+    reverseCouleur(Couleur, NewCouleur),
+    listeCoupsPossibles(Plateau, NewCouleur, CoupsPossibles),
+    NewProfondeur is Profondeur - 1,
+    NewDrapeau is -Drapeau,
+    evaluer_et_choisir(CoupsPossibles, Plateau, NewCouleur, NewProfondeur, NewDrapeau, (nil, -1000), (NewPlateau, Value)).
+
+update(NewPlateau, Value, (NewPlateau1, Value1), (NewPlateau1, Value1)) :-
+    	Value =< Value1.
+
+update(NewPlateau, Value, (NewPlateau1, Value1), (NewPlateau, Value)) :-
+    Value > Value1.
       
 %%%%%%%%%%%%%%
 %% END GAME %%
