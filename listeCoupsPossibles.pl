@@ -144,16 +144,16 @@ coupPossible(Plateau,X,Y,Couleur):-
 % unifie dans ListeCoupsPossibles la liste des coordonnées [X,Y] où il est possible de poser des pions de couleur Couleur
 
 listeCoupsPossibles(Plateau,Couleur,ListeCoupsPossibles):-
-    listeCoupsPossiblesSousMethode(Plateau,Plateau,Couleur,ListeCoupsPossibles,_),!.
+    listeCoupsPossiblesSousMethode(Plateau,Plateau,Couleur,ListeCoupsPossibles,_),!.
 
 
 listeCoupsPossiblesSousMethode(_,[],_,[],-1).
 
 listeCoupsPossiblesSousMethode(Plateau,[_|Reste],Couleur,ListeCoupsPossibles,N):-
     listeCoupsPossiblesSousMethode(Plateau,Reste,Couleur,L2,NN),
-    N is NN+1,
-    mod(N,8,Y),
-    div(N,8,X),
+    N is NN+1,
+    mod(N,8,Y),
+    div(N,8,X),
     majCoups(Plateau,X,Y,Couleur,L2,ListeCoupsPossibles).
 
 % Z correspond à Y
