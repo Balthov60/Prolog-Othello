@@ -4,11 +4,11 @@ play :-
     initPlateau(Plateau),
     
     write('Joueur vs Ordi (entrer : j) ou Ordi vs Ordi (entrer : o)\n'),
-    read(Player),
+    read(PlayerType),
     
-    (Player = j -> 
+    (PlayerType = j -> 
         write('Joueur vs Ordi \n')
-        ; (Player = o ->
+        ; (PlayerType = o ->
             write('Ordi vs Ordi \n')
             ; fail)),
             
@@ -30,12 +30,14 @@ roundLoop(Plateau, Color, PlayerType, PreviousPlayed) :-
     (listeNonVide(CoupsPossible) ->
         write('Joueur Joue... \n'),
 
-        %(PlayerType = j -> 
-        %    entrerCoup(X, Y),
-        %    ; (PlayerType = o ->
-        %        choixCoupPossible(Plateau, Color, CoupsPossible, X, Y),
-        %        ; fail)
-        %),
+        write('Player Type : '),
+        write(PlayerType),
+        (PlayerType = j -> 
+            entrerCoup(X, Y)
+            ; (PlayerType = o ->
+                choixCoupPossible(Plateau, Color, CoupsPossible, X, Y)
+                ; fail)
+        ),
         choixCoupPossible(Plateau, Color, CoupsPossible, X, Y),
         
         write('Choix Coup Possible.. \n'),
