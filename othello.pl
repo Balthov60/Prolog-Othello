@@ -35,9 +35,10 @@ roundLoop(Plateau, Color, PlayerType, HeuristicIndex, PreviousPlayed) :-
                 choixCoupPossible(Plateau, Color, CoupsPossible, HeuristicIndex, PlateauFinal)
                 ; fail)
         ),      
-        write('Fin Manche - Joué.\n'),
-        print_matrice(PlateauFinal),
+        writeln('Fin Manche - Joué.'),
         
+        print_matrice(PlateauFinal),
+        writeln('test'),
         roundLoop(PlateauFinal, NewColor, PlayerType, HeuristicIndex, true)
     
     ; PreviousPlayed = true -> 

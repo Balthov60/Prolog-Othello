@@ -1,4 +1,4 @@
-:- consult(listeCoupsPossibles.pl).
+:- consult(listeCoupsPossibles).
 
 % Heuristique pour minimiser le nombre de coup possible de l'adversaire
 

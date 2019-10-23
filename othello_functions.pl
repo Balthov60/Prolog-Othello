@@ -1,8 +1,8 @@
 :- consult(primitive).
 :- consult(listeCoupsPossibles).
-:- consult(HeuristiqueDanger).
-:- consult(HeuristiqueMaximiserPionsAlies).
-:- consult(HeuristiqueMinimiserCoupAdverse).
+:- consult(heuristiqueDanger).
+:- consult(heuristiqueMaximiserPionsAlies).
+:- consult(heuristiqueMinimiserCoupAdverse).
 :- consult(heuristiquesGrouperPions).
 
 module(matrix).
@@ -193,7 +193,7 @@ minimax(Profondeur, Plateau, Couleur, Drapeau, NewPlateau, Value, HeuristicIndex
     evaluer_et_choisir(CoupsPossibles, Plateau, NewCouleur, NewProfondeur, NewDrapeau, (nil, -1000), (NewPlateau, Value), HeuristicIndex).
 
 update(NewPlateau, Value, (NewPlateau1, Value1), (NewPlateau1, Value1)) :-
-    	Value =< Value1.
+    Value =< Value1.
 
 update(NewPlateau, Value, (NewPlateau1, Value1), (NewPlateau, Value)) :-
     Value > Value1.
