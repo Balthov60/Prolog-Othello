@@ -22,7 +22,8 @@ entrerCoup(X, Y) :-
 % placer un pion. Return false si autre statut que vide 
 % X,Y => Coordonnée, LIST => plateau, COULEUR => n(noir) ou b(blanc) en fonction du joueur
 placerPion(Plateau, Couleur, X, Y, PlateauFinal) :-
-    remplace(X, Y, Couleur, Plateau, PlateauFinal).        
+    remplace(X, Y, Couleur, Plateau, PlateauInte),
+    tryFlipCases(PlateauInte, X, Y, Couleur, PlateauFinal).    
 
 %%%%%%%%%%%%%%%%%%%%
 %% TRY FLIP CASES %%
