@@ -1,7 +1,7 @@
 :- consult(primitive).
 
 % est vrai si la case est vide
-estVide(Plateau,X,Y):- case(X,Y,Plateau,v).
+estVide(Plateau,X,Y):- case(X,Y,Plateau,☐).
 
 % est vrai si la case est vide
 estNonVide(Plateau,X,Y):- case(X,Y,Plateau,R), R\==v.
@@ -9,24 +9,24 @@ estNonVide(Plateau,X,Y):- case(X,Y,Plateau,R), R\==v.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % vrai si une case avec un pion noir a au moins un voisin blanc
-aVoisinCouleurOpposee(Plateau,X,Y,n):- coordEnHaut(X,Y,XNew,YNew), case(XNew,YNew,Plateau,b). % au dessus
-aVoisinCouleurOpposee(Plateau,X,Y,n):- coordEnHautDroite(X,Y,XNew,YNew), case(XNew,YNew,Plateau,b). % en haut à droite
-aVoisinCouleurOpposee(Plateau,X,Y,n):- coordDroite(X,Y,XNew,YNew), case(XNew,YNew,Plateau,b). % a droite
-aVoisinCouleurOpposee(Plateau,X,Y,n):- coordEnBasDroite(X,Y,XNew,YNew), case(XNew,YNew,Plateau,b). % en bas a droite
-aVoisinCouleurOpposee(Plateau,X,Y,n):- coordEnBas(X,Y,XNew,YNew), case(XNew,YNew,Plateau,b). % en dessous
-aVoisinCouleurOpposee(Plateau,X,Y,n):- coordEnBasGauche(X,Y,XNew,YNew), case(XNew,YNew,Plateau,b). % en bas a gauche
-aVoisinCouleurOpposee(Plateau,X,Y,n):- coordGauche(X,Y,XNew,YNew), case(XNew,YNew,Plateau,b). % a gauche
-aVoisinCouleurOpposee(Plateau,X,Y,n):- coordEnHautGauche(X,Y,XNew,YNew), case(XNew,YNew,Plateau,b). % en haut a gauche
+aVoisinCouleurOpposee(Plateau,X,Y,x):- coordEnHaut(X,Y,XNew,YNew), case(XNew,YNew,Plateau,o). % au dessus
+aVoisinCouleurOpposee(Plateau,X,Y,x):- coordEnHautDroite(X,Y,XNew,YNew), case(XNew,YNew,Plateau,o). % en haut à droite
+aVoisinCouleurOpposee(Plateau,X,Y,x):- coordDroite(X,Y,XNew,YNew), case(XNew,YNew,Plateau,o). % a droite
+aVoisinCouleurOpposee(Plateau,X,Y,x):- coordEnBasDroite(X,Y,XNew,YNew), case(XNew,YNew,Plateau,o). % en bas a droite
+aVoisinCouleurOpposee(Plateau,X,Y,x):- coordEnBas(X,Y,XNew,YNew), case(XNew,YNew,Plateau,o). % en dessous
+aVoisinCouleurOpposee(Plateau,X,Y,x):- coordEnBasGauche(X,Y,XNew,YNew), case(XNew,YNew,Plateau,o). % en bas a gauche
+aVoisinCouleurOpposee(Plateau,X,Y,x):- coordGauche(X,Y,XNew,YNew), case(XNew,YNew,Plateau,o). % a gauche
+aVoisinCouleurOpposee(Plateau,X,Y,x):- coordEnHautGauche(X,Y,XNew,YNew), case(XNew,YNew,Plateau,o). % en haut a gauche
 
 % vrai si une case avec un pion blanc a au moins un voisin noir
-aVoisinCouleurOpposee(Plateau,X,Y,b):- coordEnHaut(X,Y,XNew,YNew), case(XNew,YNew,Plateau,n). % au dessus
-aVoisinCouleurOpposee(Plateau,X,Y,b):- coordEnHautDroite(X,Y,XNew,YNew), case(XNew,YNew,Plateau,n). % en haut à droite
-aVoisinCouleurOpposee(Plateau,X,Y,b):- coordDroite(X,Y,XNew,YNew), case(XNew,YNew,Plateau,n). % a droite
-aVoisinCouleurOpposee(Plateau,X,Y,b):- coordEnBasDroite(X,Y,XNew,YNew), case(XNew,YNew,Plateau,n). % en bas a droite
-aVoisinCouleurOpposee(Plateau,X,Y,b):- coordEnBas(X,Y,XNew,YNew), case(XNew,YNew,Plateau,n). % en dessous
-aVoisinCouleurOpposee(Plateau,X,Y,b):- coordEnBasGauche(X,Y,XNew,YNew), case(XNew,YNew,Plateau,n). % en bas a gauche
-aVoisinCouleurOpposee(Plateau,X,Y,b):- coordGauche(X,Y,XNew,YNew), case(XNew,YNew,Plateau,n). % a gauche
-aVoisinCouleurOpposee(Plateau,X,Y,b):- coordEnHautGauche(X,Y,XNew,YNew), case(XNew,YNew,Plateau,n). % en haut a gauche
+aVoisinCouleurOpposee(Plateau,X,Y,o):- coordEnHaut(X,Y,XNew,YNew), case(XNew,YNew,Plateau,x). % au dessus
+aVoisinCouleurOpposee(Plateau,X,Y,o):- coordEnHautDroite(X,Y,XNew,YNew), case(XNew,YNew,Plateau,x). % en haut à droite
+aVoisinCouleurOpposee(Plateau,X,Y,o):- coordDroite(X,Y,XNew,YNew), case(XNew,YNew,Plateau,x). % a droite
+aVoisinCouleurOpposee(Plateau,X,Y,o):- coordEnBasDroite(X,Y,XNew,YNew), case(XNew,YNew,Plateau,x). % en bas a droite
+aVoisinCouleurOpposee(Plateau,X,Y,o):- coordEnBas(X,Y,XNew,YNew), case(XNew,YNew,Plateau,x). % en dessous
+aVoisinCouleurOpposee(Plateau,X,Y,o):- coordEnBasGauche(X,Y,XNew,YNew), case(XNew,YNew,Plateau,x). % en bas a gauche
+aVoisinCouleurOpposee(Plateau,X,Y,o):- coordGauche(X,Y,XNew,YNew), case(XNew,YNew,Plateau,x). % a gauche
+aVoisinCouleurOpposee(Plateau,X,Y,o):- coordEnHautGauche(X,Y,XNew,YNew), case(XNew,YNew,Plateau,x). % en haut a gauche
 
 % calcule les coordonnees X2 et Y2
 % permet d avancer dans une direction

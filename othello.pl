@@ -24,7 +24,7 @@ play :-
     ; fail),
             
     print_matrice(Plateau),
-    roundLoop(Plateau, n, PlayerType, HeuristicIndex1, HeuristicIndex2, true).
+    roundLoop(Plateau, x, PlayerType, HeuristicIndex1, HeuristicIndex2, true).
     
 roundLoop(Plateau, Color, PlayerType, HeuristicIndex1, HeuristicIndex2, PreviousPlayed) :-
     write('Début Manche : '), write(PlayerType), write(" "), writeln(Color),
@@ -60,6 +60,8 @@ roundLoop(Plateau, Color, PlayerType, HeuristicIndex1, HeuristicIndex2, Previous
         passerJoueurSuivant(PlayerType, NextPlayerType),
         roundLoop(Plateau, NewColor, NextPlayerType, HeuristicIndex1, HeuristicIndex2, false)        
 	; afficherResultat(Plateau)).
+
+% Display
 
 writeChoixHeuristiques(PhraseIntro) :-
     writeln(PhraseIntro),

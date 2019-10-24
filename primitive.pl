@@ -50,8 +50,8 @@ unlist([A], A).
 % Color & Player Primitive
 
 reverseCouleur(A, B) :-
-    (A = b -> B = n;
-        A = n -> B = b;
+    (A = o -> B = x;
+        A = x -> B = o;
     false).
     
 passerJoueurSuivant(j,oj).

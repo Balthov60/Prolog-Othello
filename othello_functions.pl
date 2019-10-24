@@ -7,7 +7,7 @@ module(matrix).
 
 % Initialise le plateau dans plateau
 initPlateau(Plateau) :-
-    Plateau = [v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, b, n, v, v, v, v, v, v, n, b, v, v, v, v, v, v, v, v, v, v, v,v, v, v, v, v, v, v, v,v, v, v, v, v, v, v, v].
+    Plateau = [☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, o, x, ☐, ☐, ☐, ☐, ☐, ☐, x, o, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐,☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐,☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐].
 
 % Logique centrale : choisis un coup X,Y parmus coupsPossible
 choixCoupPossible(Plateau, Couleur, CoupsPossibles, HeuristicIndex, PlateauResultant) :-
@@ -19,7 +19,7 @@ entrerCoup(X, Y) :-
 	read(Y).
 
 % placer un pion. Return false si autre statut que vide 
-% X,Y => Coordonnée, LIST => plateau, COULEUR => n(noir) ou b(blanc) en fonction du joueur
+% X,Y => Coordonnée, LIST => plateau, COULEUR => x ou o en fonction du joueur
 placerPion(Plateau, Couleur, X, Y, PlateauFinal) :-
     remplace(X, Y, Couleur, Plateau, PlateauInte),
     tryFlipCases(PlateauInte, X, Y, Couleur, PlateauFinal).    
@@ -117,8 +117,8 @@ tryFlipCases(Plateau, X, Y, Couleur, PlateauResult) :-
 
 flipPion(Plateau, X, Y, R):-
      case(X, Y, Plateau, Z),
-     (Z = 'n' -> remplace(X, Y, 'b', Plateau, R);
-     Z = 'b' -> remplace(X, Y, 'n', Plateau, R);
+     (Z = 'x' -> remplace(X, Y, 'o', Plateau, R);
+     Z = 'o' -> remplace(X, Y, 'x', Plateau, R);
      fail).        
      
 flipPionsSurLigne(Plateau, Axe, Dir, Borne1, Borne2, R) :- 
@@ -225,8 +225,8 @@ testFinPartie(Plateau) :-
 % Affiche les résultat sur la partie
 afficherResultat(Plateau) :-
     print_matrice(Plateau),
-   	count(Plateau, b, B),
-	count(Plateau, n, N),
+   	count(Plateau, o, B),
+	count(Plateau, x, N),
     (N > B -> write('Les noirs ont gagné! '),write(N),write(' à '),write(B), write('\n');
    	B > N -> write('Les blancs ont gagné! '),write(B),write(' à '),write(N), write('\n');
    	B = N -> write('Match nul! '),write(N), write(' partout.'), write('\n');
