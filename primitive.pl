@@ -47,12 +47,17 @@ recupererY([_|A], Y) :-
 
 unlist([A], A).
 
-% Color Primitive
+% Color & Player Primitive
 
 reverseCouleur(A, B) :-
     (A = b -> B = n;
         A = n -> B = b;
     false).
+    
+passerJoueurSuivant(j,oj).
+passerJoueurSuivant(oj,j).
+passerJoueurSuivant(o,o2).
+passerJoueurSuivant(o2,o).
     
 % List Primitive
 

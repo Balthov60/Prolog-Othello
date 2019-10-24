@@ -1,8 +1,6 @@
 :- consult(primitive).
 :- consult(listeCoupsPossibles).
 :- consult(heuristiqueDanger).
-:- consult(heuristiqueMaximiserPionsAlies).
-:- consult(heuristiqueMinimiserCoupAdverse).
 :- consult(heuristiquesGrouperPions).
 
 module(matrix).
@@ -202,6 +200,17 @@ update(NewPlateau, Value, (NewPlateau1, Value1), (NewPlateau1, Value1)) :-
 update(NewPlateau, Value, (NewPlateau1, Value1), (NewPlateau, Value)) :-
     Value > Value1.
       
+%%%%%%%%%%%%%%%
+%% PRIMITIVE %%
+%%%%%%%%%%%%%%%
+
+heuristiqueMaximiserNombrePionsAlies(Plateau, Couleur, Score) :-
+    count(Plateau, Couleur, Score).
+
+heuristiqueMinimiserCoupAdversaire(Plateau, Couleur, Score) :- 
+	listeCoupsPossibles(Plateau, Couleur, ListeCoupPossibles),
+    length(ListeCoupPossibles, Score).
+        
 %%%%%%%%%%%%%%
 %% END GAME %%
 %%%%%%%%%%%%%%
