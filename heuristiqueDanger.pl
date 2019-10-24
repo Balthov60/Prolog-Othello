@@ -11,10 +11,10 @@ valeurCase(X, Y, Val) :-
     nth0(Z, P, Val).
 
 valeurCases(Plateau) :-
-    Plateau = [100, 0, 75, 30,
-                0, 75, 0, 0,
-                75, 0, 0, 0,
-                30, 0, 0, -1].
+    Plateau = [9999, 4, 3, 2,
+               4, 3, 2, 0,
+               3, 2, 0, 0,
+               2, 0, 0, -1].
 
 dangerCase(X, Y, Val) :-
     dangerCases(P),
@@ -26,10 +26,10 @@ dangerCase(X, Y, Val) :-
     nth0(Z, P, Val).
 
 dangerCases(Plateau) :-
-    Plateau = [0, 100, 40, 20,
-            100, 40, 25, 0,
-            40, 25, 0, 0,
-            20, 0, 0, -1].
+    Plateau = [0, 5, 3, 0,
+              5, 3, 0, 0,
+              3, 0, 0, 0,
+              0, 0, 0, -1].
 
 heuristiqueDanger(Plateau, Couleur, Score) :-
     listeCoupsPossibles(Plateau, Couleur, CoupsPossible),

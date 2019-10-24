@@ -1,7 +1,7 @@
 :- consult(primitive).
 
 % est vrai si la case est vide
-estVide(Plateau,X,Y):- case(X,Y,Plateau,☐).
+estVide(Plateau,X,Y):- case(X,Y,Plateau,v).
 
 % est vrai si la case est vide
 estNonVide(Plateau,X,Y):- case(X,Y,Plateau,R), R\==v.

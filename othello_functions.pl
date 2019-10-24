@@ -7,7 +7,7 @@ module(matrix).
 
 % Initialise le plateau dans plateau
 initPlateau(Plateau) :-
-    Plateau = [☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, o, x, ☐, ☐, ☐, ☐, ☐, ☐, x, o, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐,☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐,☐, ☐, ☐, ☐, ☐, ☐, ☐, ☐].
+    Plateau = [v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, v, o, x, v, v, v, v, v, v, x, o, v, v, v, v, v, v, v, v, v, v, v,v, v, v, v, v, v, v, v,v, v, v, v, v, v, v, v].
 
 % Logique centrale : choisis un coup X,Y parmus coupsPossible
 choixCoupPossible(Plateau, Couleur, CoupsPossibles, HeuristicIndex, PlateauResultant) :-
