@@ -167,40 +167,40 @@ recurFlipCases(Plateau, X1, Y1, [[X2|Y2]|T], Result) :-
 %%%%%%%%%%%%% 
 
 % Simple MINIMAX Algorithm
-evaluer_et_choisir([[X,Y]|CoupsPossibles], Plateau, Couleur, Profondeur, Drapeau, Record, Result, HeuristicIndex) :-
+evaluer_et_choisir([[X,Y]|CoupsPossibles], Plateau, Couleur, Profondeur, Alpha, Beta, Record, Result, HeuristicIndex) :-
     placerPion(Plateau, Couleur, X, Y, NewPlateau),
-    minimax(Profondeur, NewPlateau, Couleur, Drapeau, PlateauX, Value, HeuristicIndex),
-    update(NewPlateau, Value, Record, Record1),
-    evaluer_et_choisir(CoupsPossibles, Plateau, Couleur, Profondeur, Drapeau, Record1, Result, HeuristicIndex).
+    alpha_beta(Profondeur, NewPlateau, Couleur, Alpha, Beta, Drapeau, PlateauX, Value, HeuristicIndex),
+	Value1 is -Value,
+    cutoff(NewPlateau, Value1, Alpha, Beta, CoupsPossibles, Plateau, Couleur, Plateau1, Result).
 
-evaluer_et_choisir([[X,Y]|[]], Plateau, Couleur, _, _, Record, Record1, _) :-
-    placerPion(Plateau, Couleur, X, Y, NewPlateau),
-    update(NewPlateau, 0, Record, Record1).
+evaluer_et_choisir([], Plateau, Couleur, Profondeur, Alpha, Beta, Record, _).
 
-evaluer_et_choisir([], Plateau, Couleur, Profondeur, Drapeau, Record, Record, _).
+alpha_beta(0, Plateau, Couleur, Alpha, Beta, NewPlateau, Value, HeuristicIndex) :-
+    (HeuristicIndex = 1 -> heuristiqueDanger(Plateau, Couleur, Value);
+    HeuristicIndex = 2 -> heuristiqueMaximiserNombrePionsAlies(Plateau, Couleur, Value);
+    HeuristicIndex = 3 -> heuristiqueMinimiserCoupAdversaire(Plateau, Couleur, Value);
+    HeuristicIndex = 4 -> hGroupePions(Plateau, Couleur, Value);
+    false).
 
-
-minimax(0, Plateau, Couleur, Drapeau, NewPlateau, Value, HeuristicIndex) :-
-    (HeuristicIndex = 1 -> heuristiqueDanger(Plateau, Couleur, V);
-    HeuristicIndex = 2 -> heuristiqueMaximiserNombrePionsAlies(Plateau, Couleur, V);
-    HeuristicIndex = 3 -> heuristiqueMinimiserCoupAdversaire(Plateau, Couleur, V);
-    HeuristicIndex = 4 -> hGroupePions(Plateau, Couleur, V);
-    false),
-    Value is V*Drapeau.
-
-minimax(Profondeur, Plateau, Couleur, Drapeau, NewPlateau, Value, HeuristicIndex) :-
+alpha_beta(Profondeur, Plateau, Couleur, Alpha, Beta, NewPlateau, Value, HeuristicIndex) :-
     Profondeur > 0,
     reverseCouleur(Couleur, NewCouleur),
     listeCoupsPossibles(Plateau, NewCouleur, CoupsPossibles),
+	Alpha1 is - Beta,
+	Beta1 is - Alpha,
     NewProfondeur is Profondeur - 1,
-    NewDrapeau is -Drapeau,
-    evaluer_et_choisir(CoupsPossibles, Plateau, NewCouleur, NewProfondeur, NewDrapeau, (nil, -1000), (NewPlateau, Value), HeuristicIndex).
+    evaluer_et_choisir(CoupsPossibles, Plateau, NewCouleur, NewProfondeur, Alpha1, Beta1, nil, (NewPlateau, Value), HeuristicIndex).  %%(nil, -1000) instead of nil ?
 
-update(NewPlateau, Value, (NewPlateau1, Value1), (NewPlateau1, Value1)) :-
-    Value =< Value1.
+cutoff(Plateau, Value, Profondeur, Alpha, Beta, CoupsPossibles, NewPlateau, Couleur, Plateau1, (PlateauResult, Value)) :-
+	Value => Beta.
 
-update(NewPlateau, Value, (NewPlateau1, Value1), (NewPlateau, Value)) :-
-    Value > Value1.
+cutoff(Plateau, Value, Profondeur, Alpha, Beta, CoupsPossibles, NewPlateau, Couleur, Plateau1, BestMove) :-
+	Alpha < Value, Value < Beta,
+	evaluer_et_choisir(CoupsPossibles, NewPlateau, Couleur, Profondeur, Value, Beta, Plateau, BestMove).
+	
+cutoff(Plateau, Value, Profondeur, Alpha, Beta, CoupsPossibles, NewPlateau, Couleur, Plateau1, BestMove) :-
+	Value =< Alpha,
+	evaluer_et_choisir(CoupsPossibles, NewPlateau, Couleur, Profondeur, Alpha, Beta, Plateau1, BestMove).
       
 %%%%%%%%%%%%%%
 %% END GAME %%
