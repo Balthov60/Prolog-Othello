@@ -1,7 +1,5 @@
-case(X, Y, LIST, RESULT) :-
-    Z is X * 8 + Y,
-    nth0(Z , LIST, RESULT).
- 
+:- consult(primitive).
+
 hGroupePions(Plateau, Couleur, ScoreFin):-
     parcourtPion(0, 0, Plateau, Couleur, 0, ScoreFin).
 
